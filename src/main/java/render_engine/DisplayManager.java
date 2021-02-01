@@ -44,16 +44,15 @@ public class DisplayManager {
                     (vidMode.height() - pHeight.get(0)) / 2);
         }
 
+        glfwSetWindowTitle(window, Constants.TITLE);
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // v-sync enable
         glfwShowWindow(window);
 
         GL.createCapabilities();
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
     }
 
     public static void updateDisplay() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
