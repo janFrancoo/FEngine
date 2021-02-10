@@ -4,6 +4,7 @@ import render_engine.DisplayManager;
 import render_engine.Loader;
 import render_engine.RawModel;
 import render_engine.Renderer;
+import shader.StaticShader;
 
 public class GameLoop {
 
@@ -12,6 +13,7 @@ public class GameLoop {
 
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
+        StaticShader shader = new StaticShader();
 
         float[] vertices = {
                 -0.5f,  0.5f, 0f,
@@ -29,11 +31,13 @@ public class GameLoop {
 
         while (!DisplayManager.windowShouldClose()) {
             renderer.prepare();
+            shader.start();
             renderer.render(model);
-
+            shader.stop();
             DisplayManager.updateDisplay();
         }
 
+        shader.clean();
         loader.clean();
         DisplayManager.closeDisplay();
     }
