@@ -1,10 +1,12 @@
 package main;
 
+import model.TexturedModel;
 import render_engine.DisplayManager;
 import render_engine.Loader;
-import render_engine.RawModel;
+import model.RawModel;
 import render_engine.Renderer;
 import shader.StaticShader;
+import texture.Texture;
 
 public class GameLoop {
 
@@ -13,7 +15,7 @@ public class GameLoop {
 
         Loader loader = new Loader();
         Renderer renderer = new Renderer();
-        StaticShader shader = new StaticShader();
+        StaticShader shader = new StaticShader("texturedVertexShader", "texturedFragmentShader");
 
         float[] vertices = {
                 -0.5f,  0.5f, 0f,
@@ -27,12 +29,21 @@ public class GameLoop {
                 3, 1, 2
         };
 
-        RawModel model = loader.loadToVao(vertices, indices);
+        float[] textureCoords = {
+                0, 0,
+                0, 1,
+                1, 1,
+                1, 0
+        };
+
+        RawModel rawModel = loader.loadToVao(vertices, indices, textureCoords);
+        Texture texture = new Texture(loader.loadTexture("image"));
+        TexturedModel texturedModel = new TexturedModel(rawModel, texture);
 
         while (!DisplayManager.windowShouldClose()) {
             renderer.prepare();
             shader.start();
-            renderer.render(model);
+            renderer.render(texturedModel);
             shader.stop();
             DisplayManager.updateDisplay();
         }

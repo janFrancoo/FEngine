@@ -1,4 +1,4 @@
-package render_engine;
+package model;
 
 public class RawModel {
 
