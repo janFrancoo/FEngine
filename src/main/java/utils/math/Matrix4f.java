@@ -1,5 +1,6 @@
 package utils.math;
 
+import model.Camera;
 import utils.Constants;
 
 import java.nio.FloatBuffer;
@@ -141,6 +142,16 @@ public class Matrix4f {
         matrix.m23 = -1;
         matrix.m32 = -((2 * Constants.NEAR_PLANE * Constants.FAR_PLANE) / frustumLen);
         matrix.m33 = 0;
+        return matrix;
+    }
+
+    public static Matrix4f createViewMatrix(Camera camera) {
+        Matrix4f matrix = new Matrix4f();
+        Matrix4f.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0), matrix, matrix);
+        Matrix4f.rotate((float) Math.toRadians(camera.getYaw()), new Vector3f(0, 1, 0), matrix, matrix);
+        Vector3f cameraPos = camera.getPosition();
+        Vector3f negativeCameraPos = new Vector3f(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        Matrix4f.translate(negativeCameraPos, matrix, matrix);
         return matrix;
     }
 

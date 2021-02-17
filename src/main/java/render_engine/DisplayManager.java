@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import utils.Constants;
+import utils.Input;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
@@ -43,6 +44,7 @@ public class DisplayManager {
                     (vidMode.height() - pHeight.get(0)) / 2);
         }
 
+        glfwSetKeyCallback(window, new Input());
         glfwSetWindowTitle(window, Constants.TITLE);
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // v-sync enable

@@ -1,5 +1,6 @@
 package main;
 
+import model.Camera;
 import model.Entity;
 import model.TexturedModel;
 import render_engine.DisplayManager;
@@ -8,6 +9,7 @@ import model.RawModel;
 import render_engine.Renderer;
 import shader.StaticShader;
 import texture.Texture;
+import utils.math.Matrix4f;
 import utils.math.Vector3f;
 
 public class GameLoop {
@@ -41,12 +43,16 @@ public class GameLoop {
         RawModel rawModel = loader.loadToVao(vertices, indices, textureCoords);
         Texture texture = new Texture(loader.loadTexture("image"));
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
-        Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -1), 0, 0, 0, 1);
+        Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -5), 0, 0, 0, 1);
+
+        Camera camera = new Camera();
 
         while (!DisplayManager.windowShouldClose()) {
-            entity.increasePosition(new Vector3f(0, 0, -0.1f));
+            camera.move();
             renderer.prepare();
             shader.start();
+            Matrix4f viewMatrix = Matrix4f.createViewMatrix(camera);
+            shader.loadViewMatrix(viewMatrix);
             renderer.render(entity);
             shader.stop();
             DisplayManager.updateDisplay();
