@@ -28,6 +28,7 @@ public abstract class ShaderLoader {
         bindAttributes();
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
+        getAllUniformLocations();
     }
 
     public void start() {

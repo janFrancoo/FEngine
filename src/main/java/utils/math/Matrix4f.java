@@ -1,5 +1,7 @@
 package utils.math;
 
+import utils.Constants;
+
 import java.nio.FloatBuffer;
 
 public class Matrix4f {
@@ -123,6 +125,22 @@ public class Matrix4f {
         Matrix4f.rotate((float) Math.toRadians(ry), new Vector3f(0, 1, 0), matrix, matrix);
         Matrix4f.rotate((float) Math.toRadians(rz), new Vector3f(0, 0, 1), matrix, matrix);
         Matrix4f.scale(new Vector3f(scale, scale, scale), matrix, matrix);
+        return matrix;
+    }
+
+    public static Matrix4f createProjectionMatrix() {
+        float aspectRatio = (float) Constants.WIDTH / (float) Constants.HEIGHT;
+        float yScale = (float) ((1f / Math.tan(Math.toRadians(Constants.FOV / 2f))) * aspectRatio);
+        float xScale = yScale / aspectRatio;
+        float frustumLen = Constants.FAR_PLANE - Constants.NEAR_PLANE;
+
+        Matrix4f matrix = new Matrix4f();
+        matrix.m00 = xScale;
+        matrix.m11 = yScale;
+        matrix.m22 = -((Constants.FAR_PLANE + Constants.NEAR_PLANE) / frustumLen);
+        matrix.m23 = -1;
+        matrix.m32 = -((2 * Constants.NEAR_PLANE * Constants.FAR_PLANE) / frustumLen);
+        matrix.m33 = 0;
         return matrix;
     }
 

@@ -16,6 +16,10 @@ public class Renderer {
 
     public Renderer(StaticShader shader) {
         this.shader = shader;
+        Matrix4f projectionMatrix = Matrix4f.createProjectionMatrix();
+        shader.start();
+        shader.loadProjectionMatrix(projectionMatrix);
+        shader.stop();
     }
 
     public void prepare() {

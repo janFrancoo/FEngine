@@ -6,6 +6,7 @@ import utils.math.Matrix4f;
 public class StaticShader extends ShaderLoader {
 
     private int locationTransformationMatrix;
+    private int locationProjectionMatrix;
 
     public StaticShader(String vertexShaderFile, String fragmentShaderFile) {
         super(Constants.SHADER_FOLDER + "/" + vertexShaderFile + ".txt",
@@ -15,6 +16,7 @@ public class StaticShader extends ShaderLoader {
     @Override
     protected void getAllUniformLocations() {
         locationTransformationMatrix = super.getUniformLocation("transformationMatrix");
+        locationProjectionMatrix = super.getUniformLocation("projectionMatrix");
     }
 
     @Override
@@ -25,6 +27,10 @@ public class StaticShader extends ShaderLoader {
 
     public void loadTransformationMatrix(Matrix4f matrix) {
         super.loadMatrix(locationTransformationMatrix, matrix);
+    }
+
+    public void loadProjectionMatrix(Matrix4f matrix) {
+        super.loadMatrix(locationProjectionMatrix, matrix);
     }
 
 }

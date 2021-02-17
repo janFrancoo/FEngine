@@ -41,9 +41,10 @@ public class GameLoop {
         RawModel rawModel = loader.loadToVao(vertices, indices, textureCoords);
         Texture texture = new Texture(loader.loadTexture("image"));
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
-        Entity entity = new Entity(texturedModel, new Vector3f(0.25f, 0.25f, 0), 45, 0, 90, 1);
+        Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -1), 0, 0, 0, 1);
 
         while (!DisplayManager.windowShouldClose()) {
+            entity.increasePosition(new Vector3f(0, 0, -0.1f));
             renderer.prepare();
             shader.start();
             renderer.render(entity);
