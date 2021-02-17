@@ -1,5 +1,6 @@
 package main;
 
+import model.Entity;
 import model.TexturedModel;
 import render_engine.DisplayManager;
 import render_engine.Loader;
@@ -7,6 +8,7 @@ import model.RawModel;
 import render_engine.Renderer;
 import shader.StaticShader;
 import texture.Texture;
+import utils.math.Vector3f;
 
 public class GameLoop {
 
@@ -14,8 +16,8 @@ public class GameLoop {
         DisplayManager.createDisplay();
 
         Loader loader = new Loader();
-        Renderer renderer = new Renderer();
-        StaticShader shader = new StaticShader("texturedVertexShader", "texturedFragmentShader");
+        StaticShader shader = new StaticShader("vertexShader", "fragmentShader");
+        Renderer renderer = new Renderer(shader);
 
         float[] vertices = {
                 -0.5f,  0.5f, 0f,
@@ -39,11 +41,12 @@ public class GameLoop {
         RawModel rawModel = loader.loadToVao(vertices, indices, textureCoords);
         Texture texture = new Texture(loader.loadTexture("image"));
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
+        Entity entity = new Entity(texturedModel, new Vector3f(0.25f, 0.25f, 0), 45, 0, 90, 1);
 
         while (!DisplayManager.windowShouldClose()) {
             renderer.prepare();
             shader.start();
-            renderer.render(texturedModel);
+            renderer.render(entity);
             shader.stop();
             DisplayManager.updateDisplay();
         }

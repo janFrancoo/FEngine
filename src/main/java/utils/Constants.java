@@ -7,8 +7,6 @@ public class Constants {
     public static final String TITLE = "FEngine";
 
     // Folders & files
-    public static final String VERTEX_SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\vertex";
-    public static final String FRAGMENT_SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\fragment";
+    public static final String SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader";
 }

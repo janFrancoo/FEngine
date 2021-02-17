@@ -8,8 +8,8 @@ public class StaticShader extends ShaderLoader {
     private int locationTransformationMatrix;
 
     public StaticShader(String vertexShaderFile, String fragmentShaderFile) {
-        super(Constants.VERTEX_SHADER_FOLDER + "/" + vertexShaderFile + ".txt",
-                Constants.FRAGMENT_SHADER_FOLDER + "/" + fragmentShaderFile + ".txt");
+        super(Constants.SHADER_FOLDER + "/" + vertexShaderFile + ".txt",
+                Constants.SHADER_FOLDER + "/" + fragmentShaderFile + ".txt");
     }
 
     @Override
