@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import utils.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,7 +17,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Loader {
+public class ModelLoader {
 
     private final List<Integer> vaoList = new ArrayList<>();
     private final List<Integer> vboList = new ArrayList<>();
@@ -27,7 +28,7 @@ public class Loader {
         int width = 0, height = 0;
 
         try {
-            BufferedImage image = ImageIO.read(new FileInputStream("res/" + fileName + ".png"));
+            BufferedImage image = ImageIO.read(new FileInputStream(Constants.RES_FOLDER + "/" + fileName + ".png"));
             width = image.getWidth();
             height = image.getHeight();
             pixels = new int[width * height];

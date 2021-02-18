@@ -1,7 +1,5 @@
 package model;
 
-import texture.Texture;
-
 public class TexturedModel {
 
     private final RawModel rawModel;

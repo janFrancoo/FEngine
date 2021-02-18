@@ -9,6 +9,7 @@ public class Constants {
     // Folders & files
     public static final String SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
             "\\java\\shader";
+    public static final String RES_FOLDER = "res";
 
     // Scene
     public static final float FOV = 70;
