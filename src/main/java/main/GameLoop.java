@@ -20,6 +20,8 @@ public class GameLoop {
 
         RawModel rawModel = OBJLoader.loadOBJModel("dragon", loader);
         Texture texture = new Texture(loader.loadTexture("stallTexture"));
+        texture.setShineDamper(10);
+        texture.setReflectivity(1);
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
         Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -30), 0, 0, 0, 1);
 

@@ -11,6 +11,8 @@ public class StaticShader extends ShaderLoader {
     private int locationViewMatrix;
     private int locationLightPosition;
     private int locationLightColor;
+    private int locationShineDamper;
+    private int locationReflectivity;
 
     public StaticShader(String vertexShaderFile, String fragmentShaderFile) {
         super(Constants.SHADER_FOLDER + "/" + vertexShaderFile + ".txt",
@@ -24,6 +26,8 @@ public class StaticShader extends ShaderLoader {
         locationViewMatrix = super.getUniformLocation("viewMatrix");
         locationLightPosition = super.getUniformLocation("lightPosition");
         locationLightColor = super.getUniformLocation("lightColor");
+        locationShineDamper = super.getUniformLocation("shineDamper");
+        locationReflectivity = super.getUniformLocation("reflectivity");
     }
 
     @Override
@@ -48,6 +52,11 @@ public class StaticShader extends ShaderLoader {
     public void loadLight(Light light) {
         super.loadVector(locationLightPosition, light.getPosition());
         super.loadVector(locationLightColor, light.getColor());
+    }
+
+    public void loadShineValues(float shineDamper, float reflectivity) {
+        super.loadFloat(locationShineDamper, shineDamper);
+        super.loadFloat(locationReflectivity, reflectivity);
     }
 
 }

@@ -38,6 +38,7 @@ public class Renderer {
         Matrix4f transformationMatrix = Matrix4f.createTransformationMatrix(entity.getPosition(), entity.getRotX(),
                 entity.getRotY(), entity.getRotZ(), entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix);
+        shader.loadShineValues(texturedModel.getTexture().getShineDamper(), texturedModel.getTexture().getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, rawModel.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
