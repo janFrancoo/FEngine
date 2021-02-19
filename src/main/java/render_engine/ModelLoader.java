@@ -58,23 +58,14 @@ public class ModelLoader {
         return result;
     }
 
-    public RawModel loadToVao(float[] positions, int[] indices) {
-        int vaoId = GL30.glGenVertexArrays();
-        vaoList.add(vaoId);
-        GL30.glBindVertexArray(vaoId);
-        bindIndicesBuffer(indices);
-        storeDataInAttrList(0, 3, positions);
-        GL30.glBindVertexArray(0);
-        return new RawModel(vaoId, indices.length);
-    }
-
-    public RawModel loadToVao(float[] positions, int[] indices, float[] textureCoords) {
+    public RawModel loadToVao(float[] positions, int[] indices, float[] textureCoords, float[] normals) {
         int vaoId = GL30.glGenVertexArrays();
         vaoList.add(vaoId);
         GL30.glBindVertexArray(vaoId);
         bindIndicesBuffer(indices);
         storeDataInAttrList(0, 3, positions);
         storeDataInAttrList(1, 2, textureCoords);
+        storeDataInAttrList(2, 3, normals);
         GL30.glBindVertexArray(0);
         return new RawModel(vaoId, indices.length);
     }
