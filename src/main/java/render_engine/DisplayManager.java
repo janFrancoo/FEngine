@@ -18,6 +18,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 public class DisplayManager {
 
     private static long window;
+    private static int frameCount = 0;
+    private static double prevTime = glfwGetTime();
 
     public static void createDisplay() {
         GLFWErrorCallback.createPrint(System.err).set();
@@ -60,6 +62,17 @@ public class DisplayManager {
 
     public static boolean windowShouldClose() {
         return glfwWindowShouldClose(window);
+    }
+
+    public static void calculateFPS() {
+        double currentTime = glfwGetTime();
+        frameCount++;
+
+        if (currentTime - prevTime >= 1.0) {
+            System.out.println("FPS: " + frameCount);
+            frameCount = 0;
+            prevTime = currentTime;
+        }
     }
 
     public static void closeDisplay() {

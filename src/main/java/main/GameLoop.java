@@ -70,6 +70,7 @@ public class GameLoop {
 
             renderer.render(camera, light);
             DisplayManager.updateDisplay();
+            DisplayManager.calculateFPS();
         }
 
         loader.clean();
