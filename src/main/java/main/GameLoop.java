@@ -5,32 +5,68 @@ import render_engine.*;
 import utils.OBJLoader;
 import utils.math.Vector3f;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static utils.Constants.TERRAIN_SIZE;
+
 public class GameLoop {
 
     public static void main(String[] args) {
+        Random random = new Random();
+
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
         Renderer renderer = new Renderer();
 
-        RawModel rawModel = OBJLoader.loadOBJModel("dragon", loader);
-        Texture texture = new Texture(loader.loadTexture("stallTexture"));
-        texture.setShineDamper(10);
-        texture.setReflectivity(1);
-        TexturedModel texturedModel = new TexturedModel(rawModel, texture);
-        Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -30), 0, 0, 0, 1);
+        RawModel rawDragon = OBJLoader.loadOBJModel("dragon", loader);
+        Texture textureDragon = new Texture(loader.loadTexture("stallTexture"));
+        textureDragon.setShineDamper(10);
+        textureDragon.setReflectivity(1);
+        TexturedModel texturedDragon = new TexturedModel(rawDragon, textureDragon);
+        Entity dragon = new Entity(texturedDragon, new Vector3f(0, 0, -30), 0, 0, 0, 1);
+
+        RawModel rawFern = OBJLoader.loadOBJModel("fern", loader);
+        Texture textureFern = new Texture(loader.loadTexture("fern"));
+        textureFern.setTransparent(true);
+        textureFern.setFakeLight(true);
+        TexturedModel texturedFern = new TexturedModel(rawFern, textureFern);
+        List<Entity> ferns = new ArrayList<>();
+        for (int i=0; i<250; i++)
+            ferns.add(new Entity(
+                    texturedFern,
+                    new Vector3f(random.nextInt((int) TERRAIN_SIZE), 0, -random.nextInt((int) TERRAIN_SIZE)),
+                    0, 0, 0, 1));
+
+        RawModel rawGrass = OBJLoader.loadOBJModel("grassModel", loader);
+        Texture textureGrass = new Texture(loader.loadTexture("grassTexture"));
+        textureGrass.setTransparent(true);
+        textureGrass.setFakeLight(true);
+        TexturedModel texturedGrass = new TexturedModel(rawGrass, textureGrass);
+        List<Entity> grasses = new ArrayList<>();
+        for (int i=0; i<250; i++)
+            grasses.add(new Entity(
+                    texturedGrass,
+                    new Vector3f(random.nextInt((int) TERRAIN_SIZE), 0, -random.nextInt((int) TERRAIN_SIZE)),
+                    0, 0, 0, 5));
 
         Terrain terrain = new Terrain(0, -1, loader, new Texture(loader.loadTexture("grass")));
 
-        Camera camera = new Camera(new Vector3f(0, 20, 0));
-        camera.setPitch(20);
-        Light light = new Light(new Vector3f(0, 100, 0), new Vector3f(1, 1, 1));
+        Camera camera = new Camera(new Vector3f(0, 10, 0));
+        camera.setPitch(3);
+        Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
 
         while (!DisplayManager.windowShouldClose()) {
             camera.move();
 
             renderer.processTerrain(terrain);
-            renderer.processEntity(entity);
+            renderer.processEntity(dragon);
+            for (Entity fern : ferns)
+                renderer.processEntity(fern);
+            for (Entity grass : grasses)
+                renderer.processEntity(grass);
 
             renderer.render(camera, light);
             DisplayManager.updateDisplay();

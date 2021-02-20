@@ -27,8 +27,7 @@ public class Renderer {
         entityRenderer = new EntityRenderer(entityShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
 
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glCullFace(GL11.GL_BACK);
+        enableCulling();
 
         Matrix4f projectionMatrix = Matrix4f.createProjectionMatrix();
 
@@ -39,6 +38,15 @@ public class Renderer {
         terrainShader.start();
         terrainShader.loadProjectionMatrix(projectionMatrix);
         terrainShader.stop();
+    }
+
+    public static void enableCulling() {
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
+    }
+
+    public static void disableCulling() {
+        GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
     public void processEntity(Entity entity) {

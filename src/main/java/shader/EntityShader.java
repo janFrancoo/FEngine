@@ -15,6 +15,7 @@ public class EntityShader extends Shader {
     private int locationLightColor;
     private int locationShineDamper;
     private int locationReflectivity;
+    private int locationFakeLight;
 
     public EntityShader() {
         super(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
@@ -29,6 +30,7 @@ public class EntityShader extends Shader {
         locationLightColor = super.getUniformLocation("lightColor");
         locationShineDamper = super.getUniformLocation("shineDamper");
         locationReflectivity = super.getUniformLocation("reflectivity");
+        locationFakeLight = super.getUniformLocation("fakeLight");
     }
 
     @Override
@@ -58,6 +60,10 @@ public class EntityShader extends Shader {
     public void loadShineValues(float shineDamper, float reflectivity) {
         super.loadFloat(locationShineDamper, shineDamper);
         super.loadFloat(locationReflectivity, reflectivity);
+    }
+
+    public void loadFakeLightValue(boolean fakeLight) {
+        super.loadBoolean(locationFakeLight, fakeLight);
     }
 
 }
