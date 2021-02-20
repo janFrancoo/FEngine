@@ -1,10 +1,12 @@
 package shader;
 
 import model.Light;
-import utils.Constants;
 import utils.math.Matrix4f;
 
-public class StaticShader extends ShaderLoader {
+import static utils.Constants.FRAGMENT_SHADER_FILE;
+import static utils.Constants.VERTEX_SHADER_FILE;
+
+public class EntityShader extends Shader {
 
     private int locationTransformationMatrix;
     private int locationProjectionMatrix;
@@ -14,9 +16,8 @@ public class StaticShader extends ShaderLoader {
     private int locationShineDamper;
     private int locationReflectivity;
 
-    public StaticShader(String vertexShaderFile, String fragmentShaderFile) {
-        super(Constants.SHADER_FOLDER + "/" + vertexShaderFile + ".txt",
-                Constants.SHADER_FOLDER + "/" + fragmentShaderFile + ".txt");
+    public EntityShader() {
+        super(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
     }
 
     @Override

@@ -11,13 +11,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 
-public abstract class ShaderLoader {
+public abstract class Shader {
 
     private final int programID, vertexShaderID, fragmentShaderID;
 
-    private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4 * 4);
+    private static final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4 * 4);
 
-    public ShaderLoader(String vertexFile, String fragmentFile) {
+    public Shader(String vertexFile, String fragmentFile) {
         System.out.println(System.getProperty("user.dir"));
 
         vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);

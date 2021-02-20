@@ -2,10 +2,8 @@ package render_engine;
 
 import model.*;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import shader.StaticShader;
+import shader.EntityShader;
+import shader.TerrainShader;
 import utils.math.Matrix4f;
 
 import java.util.ArrayList;
@@ -15,17 +13,32 @@ import java.util.Map;
 
 public class Renderer {
 
-    private final StaticShader shader;
-    private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
+    private final EntityRenderer entityRenderer;
+    private final TerrainRenderer terrainRenderer;
+    private final EntityShader entityShader;
+    private final TerrainShader terrainShader;
 
-    public Renderer(StaticShader shader) {
-        this.shader = shader;
+    private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
+    private final List<Terrain> terrains = new ArrayList<>();
+
+    public Renderer() {
+        entityShader = new EntityShader();
+        terrainShader = new TerrainShader();
+        entityRenderer = new EntityRenderer(entityShader);
+        terrainRenderer = new TerrainRenderer(terrainShader);
+
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
+
         Matrix4f projectionMatrix = Matrix4f.createProjectionMatrix();
-        shader.start();
-        shader.loadProjectionMatrix(projectionMatrix);
-        shader.stop();
+
+        entityShader.start();
+        entityShader.loadProjectionMatrix(projectionMatrix);
+        entityShader.stop();
+
+        terrainShader.start();
+        terrainShader.loadProjectionMatrix(projectionMatrix);
+        terrainShader.stop();
     }
 
     public void processEntity(Entity entity) {
@@ -40,24 +53,28 @@ public class Renderer {
         }
     }
 
+    public void processTerrain(Terrain terrain) {
+        terrains.add(terrain);
+    }
+
     public void render(Camera camera, Light light) {
         prepare();
-        shader.start();
-        shader.loadLight(light);
         Matrix4f viewMatrix = Matrix4f.createViewMatrix(camera);
-        shader.loadViewMatrix(viewMatrix);
 
-        for (TexturedModel texturedModel : entities.keySet()) {
-            prepareTexturedModel(texturedModel);
-            List<Entity> batch = entities.get(texturedModel);
-            for (Entity entity : batch) {
-                prepareInstance(entity);
-                GL11.glDrawElements(GL11.GL_TRIANGLES, texturedModel.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-            }
-            unbindTextureModel();
-        }
+        entityShader.start();
+        entityShader.loadLight(light);
+        entityShader.loadViewMatrix(viewMatrix);
+        entityRenderer.render(entities);
+        entityShader.stop();
 
-        shader.stop();
+        terrainShader.start();
+        terrainShader.loadLight(light);
+        terrainShader.loadViewMatrix(viewMatrix);
+        terrainRenderer.render(terrains);
+        terrainShader.stop();
+
+        entities.clear();
+        terrains.clear();
     }
 
     private void prepare() {
@@ -66,32 +83,9 @@ public class Renderer {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
-    private void prepareTexturedModel(TexturedModel texturedModel) {
-        RawModel rawModel = texturedModel.getRawModel();
-        GL30.glBindVertexArray(rawModel.getVaoId());
-        GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        GL20.glEnableVertexAttribArray(2);
-        shader.loadShineValues(texturedModel.getTexture().getShineDamper(), texturedModel.getTexture().getReflectivity());
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getTextureID());
-    }
-
-    private void prepareInstance(Entity entity) {
-        Matrix4f transformationMatrix = Matrix4f.createTransformationMatrix(entity.getPosition(), entity.getRotX(),
-                entity.getRotY(), entity.getRotZ(), entity.getScale());
-        shader.loadTransformationMatrix(transformationMatrix);
-    }
-
-    private void unbindTextureModel() {
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
-        GL20.glDisableVertexAttribArray(2);
-        GL30.glBindVertexArray(0);
-    }
-
     public void clean() {
-        entities.clear();
+        entityShader.clean();
+        terrainShader.clean();
     }
 
 }

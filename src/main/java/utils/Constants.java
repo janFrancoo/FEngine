@@ -7,8 +7,14 @@ public class Constants {
     public static final String TITLE = "FEngine";
 
     // Folders & files
-    public static final String SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader";
+    public static final String VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\vertexShader.txt";
+    public static final String FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\fragmentShader.txt";
+    public static final String TERRAIN_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\terrainVertexShader.txt";
+    public static final String TERRAIN_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\terrainFragmentShader.txt";
     public static final String RES_FOLDER = "res";
 
     // Scene
@@ -17,5 +23,7 @@ public class Constants {
     public static final float FAR_PLANE = 1000;
 
     // Game Settings
-    public static final float GAME_SPEED = 0.02f;
+    public static final float GAME_SPEED = 0.5f;
+    public static final float TERRAIN_SIZE = 800;
+    public static final int TERRAIN_VERTEX_COUNT = 128;
 }
