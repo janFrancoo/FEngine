@@ -35,14 +35,10 @@ public class Renderer {
 
         entityShader.start();
         entityShader.loadProjectionMatrix(projectionMatrix);
-        entityShader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
-        entityShader.loadSkyColor(SKY_COLOR);
         entityShader.stop();
 
         terrainShader.start();
         terrainShader.loadProjectionMatrix(projectionMatrix);
-        terrainShader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
-        terrainShader.loadSkyColor(SKY_COLOR);
         terrainShader.stop();
     }
 

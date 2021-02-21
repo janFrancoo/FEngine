@@ -52,7 +52,13 @@ public class GameLoop {
                     new Vector3f(random.nextInt((int) TERRAIN_SIZE), 0, -random.nextInt((int) TERRAIN_SIZE)),
                     0, 0, 0, 5));
 
-        Terrain terrain = new Terrain(0, -1, loader, new Texture(loader.loadTexture("grass")));
+        Texture blendMap = new Texture(loader.loadTexture("blendMap"));
+        Texture backgroundTexture = new Texture(loader.loadTexture("grass"));
+        Texture rTexture = new Texture(loader.loadTexture("dirt"));
+        Texture gTexture = new Texture(loader.loadTexture("pinkFlowers"));
+        Texture bTexture = new Texture(loader.loadTexture("path"));
+        TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+        Terrain terrain = new Terrain(0, -1, loader, terrainTexturePack, blendMap);
 
         Camera camera = new Camera(new Vector3f(0, 10, 0));
         camera.setPitch(3);

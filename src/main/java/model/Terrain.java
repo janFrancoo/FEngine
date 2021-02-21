@@ -9,13 +9,15 @@ public class Terrain {
 
     private final float x, z;
     private final RawModel rawModel;
-    private final Texture texture;
+    private final TerrainTexturePack texturePack;
+    private final Texture blendMap;
 
-    public Terrain(int gridX, int gridZ, ModelLoader modelLoader, Texture texture) {
+    public Terrain(int gridX, int gridZ, ModelLoader modelLoader, TerrainTexturePack terrainTexturePack, Texture blendMap) {
         this.x = gridX * TERRAIN_SIZE;
         this.z = gridZ * TERRAIN_SIZE;
         this.rawModel = generateTerrain(modelLoader);
-        this.texture = texture;
+        this.texturePack = terrainTexturePack;
+        this.blendMap = blendMap;
     }
 
     private RawModel generateTerrain(ModelLoader loader){
@@ -72,8 +74,12 @@ public class Terrain {
         return rawModel;
     }
 
-    public Texture getTexture() {
-        return texture;
+    public TerrainTexturePack getTexturePack() {
+        return texturePack;
+    }
+
+    public Texture getBlendMap() {
+        return blendMap;
     }
 
 }

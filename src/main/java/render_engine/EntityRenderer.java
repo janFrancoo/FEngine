@@ -10,12 +10,18 @@ import utils.math.Matrix4f;
 import java.util.List;
 import java.util.Map;
 
+import static utils.Constants.*;
+
 public class EntityRenderer {
 
     private final EntityShader shader;
 
     public EntityRenderer(EntityShader shader) {
         this.shader = shader;
+        shader.start();
+        shader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
+        shader.loadSkyColor(SKY_COLOR);
+        shader.stop();
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities) {
