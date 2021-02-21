@@ -1,5 +1,7 @@
 package utils;
 
+import utils.math.Vector3f;
+
 public class Constants {
     // Window
     public static final int WIDTH = 2048;
@@ -26,4 +28,7 @@ public class Constants {
     public static final float GAME_SPEED = 0.5f;
     public static final float TERRAIN_SIZE = 800;
     public static final int TERRAIN_VERTEX_COUNT = 128;
+    public static final float FOG_DENSITY = 0.007f;
+    public static final float FOG_GRADIENT = 1.5f;
+    public static final Vector3f SKY_COLOR = new Vector3f(0.75f, 0.75f, 0.75f);
 }

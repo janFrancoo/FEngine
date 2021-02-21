@@ -2,6 +2,7 @@ package shader;
 
 import model.Light;
 import utils.math.Matrix4f;
+import utils.math.Vector3f;
 
 import static utils.Constants.TERRAIN_FRAGMENT_SHADER_FILE;
 import static utils.Constants.TERRAIN_VERTEX_SHADER_FILE;
@@ -15,6 +16,9 @@ public class TerrainShader extends Shader {
     private int locationLightColor;
     private int locationShineDamper;
     private int locationReflectivity;
+    private int locationFogDensity;
+    private int locationFogGradient;
+    private int locationSkyColor;
 
     public TerrainShader() {
         super(TERRAIN_VERTEX_SHADER_FILE, TERRAIN_FRAGMENT_SHADER_FILE);
@@ -29,6 +33,9 @@ public class TerrainShader extends Shader {
         locationLightColor = super.getUniformLocation("lightColor");
         locationShineDamper = super.getUniformLocation("shineDamper");
         locationReflectivity = super.getUniformLocation("reflectivity");
+        locationFogDensity = super.getUniformLocation("density");
+        locationFogGradient = super.getUniformLocation("gradient");
+        locationSkyColor = super.getUniformLocation("skyColor");
     }
 
     @Override
@@ -58,6 +65,15 @@ public class TerrainShader extends Shader {
     public void loadShineValues(float shineDamper, float reflectivity) {
         super.loadFloat(locationShineDamper, shineDamper);
         super.loadFloat(locationReflectivity, reflectivity);
+    }
+
+    public void loadFogValues(float fogDensity, float fogGradient) {
+        super.loadFloat(locationFogDensity, fogDensity);
+        super.loadFloat(locationFogGradient, fogGradient);
+    }
+
+    public void loadSkyColor(Vector3f color) {
+        super.loadVector(locationSkyColor, color);
     }
 
 }

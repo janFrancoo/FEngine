@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static utils.Constants.*;
+
 public class Renderer {
 
     private final EntityRenderer entityRenderer;
@@ -33,10 +35,14 @@ public class Renderer {
 
         entityShader.start();
         entityShader.loadProjectionMatrix(projectionMatrix);
+        entityShader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
+        entityShader.loadSkyColor(SKY_COLOR);
         entityShader.stop();
 
         terrainShader.start();
         terrainShader.loadProjectionMatrix(projectionMatrix);
+        terrainShader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
+        terrainShader.loadSkyColor(SKY_COLOR);
         terrainShader.stop();
     }
 
@@ -86,7 +92,7 @@ public class Renderer {
     }
 
     private void prepare() {
-        GL11.glClearColor(0, 0, 0, 1);
+        GL11.glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
