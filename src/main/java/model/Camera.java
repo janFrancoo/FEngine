@@ -19,14 +19,7 @@ public class Camera {
     }
 
     public void move() {
-        if (Input.isKeyDown(GLFW.GLFW_KEY_W))
-            position.z -= Constants.GAME_SPEED;
-        if (Input.isKeyDown(GLFW.GLFW_KEY_S))
-            position.z += Constants.GAME_SPEED;
-        if (Input.isKeyDown(GLFW.GLFW_KEY_A))
-            position.x -= Constants.GAME_SPEED;
-        if (Input.isKeyDown(GLFW.GLFW_KEY_D))
-            position.x += Constants.GAME_SPEED;
+
     }
 
     public Vector3f getPosition() {

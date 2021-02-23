@@ -19,7 +19,10 @@ public class DisplayManager {
 
     private static long window;
     private static int frameCount = 0;
+    private static double currentTime = glfwGetTime();
     private static double prevTime = glfwGetTime();
+    private static double prevTimeForFPS = glfwGetTime();
+    private static double delta;
 
     public static void createDisplay() {
         GLFWErrorCallback.createPrint(System.err).set();
@@ -58,21 +61,30 @@ public class DisplayManager {
     public static void updateDisplay() {
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        currentTime = glfwGetTime();
+        delta = currentTime - prevTime;
+        prevTime = currentTime;
+
+        calculateFPS();
     }
 
     public static boolean windowShouldClose() {
         return glfwWindowShouldClose(window);
     }
 
-    public static void calculateFPS() {
-        double currentTime = glfwGetTime();
+    private static void calculateFPS() {
         frameCount++;
 
-        if (currentTime - prevTime >= 1.0) {
+        if (currentTime - prevTimeForFPS >= 1.0) {
             System.out.println("FPS: " + frameCount);
             frameCount = 0;
-            prevTime = currentTime;
+            prevTimeForFPS = currentTime;
         }
+    }
+
+    public static double getDelta() {
+        return delta;
     }
 
     public static void closeDisplay() {

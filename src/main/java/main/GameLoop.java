@@ -26,7 +26,7 @@ public class GameLoop {
         textureDragon.setShineDamper(10);
         textureDragon.setReflectivity(1);
         TexturedModel texturedDragon = new TexturedModel(rawDragon, textureDragon);
-        Entity dragon = new Entity(texturedDragon, new Vector3f(0, 0, -30), 0, 0, 0, 1);
+        Player dragon = new Player(texturedDragon, new Vector3f(0, 0, -30), 0, 0, 0, 1);
 
         RawModel rawFern = OBJLoader.loadOBJModel("fern", loader);
         Texture textureFern = new Texture(loader.loadTexture("fern"));
@@ -66,6 +66,7 @@ public class GameLoop {
 
         while (!DisplayManager.windowShouldClose()) {
             camera.move();
+            dragon.move();
 
             renderer.processTerrain(terrain);
             renderer.processEntity(dragon);
@@ -76,7 +77,6 @@ public class GameLoop {
 
             renderer.render(camera, light);
             DisplayManager.updateDisplay();
-            DisplayManager.calculateFPS();
         }
 
         loader.clean();

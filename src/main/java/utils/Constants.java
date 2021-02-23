@@ -25,10 +25,13 @@ public class Constants {
     public static final float FAR_PLANE = 1000;
 
     // Game Settings
-    public static final float GAME_SPEED = 0.5f;
     public static final float TERRAIN_SIZE = 800;
     public static final int TERRAIN_VERTEX_COUNT = 128;
     public static final float FOG_DENSITY = 0.007f;
     public static final float FOG_GRADIENT = 1.5f;
     public static final Vector3f SKY_COLOR = new Vector3f(0.75f, 0.75f, 0.75f);
+    public static final float RUN_SPEED = 20;
+    public static final float TURN_SPEED = 40;
+    public static final float JUMP_POWER = 30;
+    public static final float GRAVITY = -50;
 }
