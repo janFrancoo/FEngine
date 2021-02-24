@@ -1,9 +1,9 @@
-package utils;
+package utils.input;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
-public class Input extends GLFWKeyCallback {
+public class KeyInput extends GLFWKeyCallback {
 
     public static boolean[] keys = new boolean[65536];
 

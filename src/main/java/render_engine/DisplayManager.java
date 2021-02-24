@@ -5,7 +5,10 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import utils.Constants;
-import utils.Input;
+import utils.input.CursorInput;
+import utils.input.KeyInput;
+import utils.input.MouseButtonInput;
+import utils.input.ScrollInput;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
@@ -49,7 +52,10 @@ public class DisplayManager {
                     (vidMode.height() - pHeight.get(0)) / 2);
         }
 
-        glfwSetKeyCallback(window, new Input());
+        glfwSetKeyCallback(window, new KeyInput());
+        glfwSetMouseButtonCallback(window, new MouseButtonInput());
+        glfwSetCursorPosCallback(window, new CursorInput());
+        glfwSetScrollCallback(window, new ScrollInput());
         glfwSetWindowTitle(window, Constants.TITLE);
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // v-sync enable

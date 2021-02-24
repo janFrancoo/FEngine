@@ -60,7 +60,7 @@ public class GameLoop {
         TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
         Terrain terrain = new Terrain(0, -1, loader, terrainTexturePack, blendMap);
 
-        Camera camera = new Camera(new Vector3f(0, 10, 0));
+        Camera camera = new Camera(dragon);
         camera.setPitch(3);
         Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
 

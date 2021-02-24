@@ -2,7 +2,7 @@ package model;
 
 import org.lwjgl.glfw.GLFW;
 import render_engine.DisplayManager;
-import utils.Input;
+import utils.input.KeyInput;
 import utils.math.Vector3f;
 
 import static utils.Constants.*;
@@ -35,21 +35,21 @@ public class Player extends Entity {
     }
 
     private void checkInputs() {
-        if (Input.isKeyDown(GLFW.GLFW_KEY_W))
+        if (KeyInput.isKeyDown(GLFW.GLFW_KEY_W))
             currentRunSpeed = RUN_SPEED;
-        else if (Input.isKeyDown(GLFW.GLFW_KEY_S))
+        else if (KeyInput.isKeyDown(GLFW.GLFW_KEY_S))
             currentRunSpeed = -RUN_SPEED;
         else
             currentRunSpeed = 0;
 
-        if (Input.isKeyDown(GLFW.GLFW_KEY_A))
+        if (KeyInput.isKeyDown(GLFW.GLFW_KEY_A))
             currentTurnSpeed = TURN_SPEED;
-        else if (Input.isKeyDown(GLFW.GLFW_KEY_D))
+        else if (KeyInput.isKeyDown(GLFW.GLFW_KEY_D))
             currentTurnSpeed = -TURN_SPEED;
         else
             currentTurnSpeed = 0;
 
-        if (!isJumping && Input.isKeyDown(GLFW.GLFW_KEY_SPACE)) {
+        if (!isJumping && KeyInput.isKeyDown(GLFW.GLFW_KEY_SPACE)) {
             isJumping = true;
             currentUpwardsSpeed = JUMP_POWER;
         }
