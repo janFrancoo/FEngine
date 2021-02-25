@@ -37,7 +37,6 @@ public class Camera {
     private void changeZoom() {
         double zoomLevel = ScrollInput.dWheel * 0.5f;
         ScrollInput.dWheel = 0;
-        System.out.println(distanceFromPlayer);
         if (distanceFromPlayer - zoomLevel > 15 && distanceFromPlayer - zoomLevel < 150)
             distanceFromPlayer -= zoomLevel;
     }
