@@ -3,6 +3,7 @@ package render_engine;
 import model.*;
 import org.lwjgl.opengl.GL11;
 import shader.EntityShader;
+import shader.GUIShader;
 import shader.TerrainShader;
 import utils.math.Matrix4f;
 
@@ -17,17 +18,22 @@ public class Renderer {
 
     private final EntityRenderer entityRenderer;
     private final TerrainRenderer terrainRenderer;
+    private final GUIRenderer guiRenderer;
     private final EntityShader entityShader;
     private final TerrainShader terrainShader;
+    private final GUIShader guiShader;
 
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private final List<Terrain> terrains = new ArrayList<>();
+    private final List<TextureGUI> guis = new ArrayList<>();
 
-    public Renderer() {
+    public Renderer(ModelLoader loader) {
         entityShader = new EntityShader();
         terrainShader = new TerrainShader();
+        guiRenderer = new GUIRenderer(loader);
         entityRenderer = new EntityRenderer(entityShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
+        guiShader = new GUIShader();
 
         enableCulling();
 
@@ -67,6 +73,10 @@ public class Renderer {
         terrains.add(terrain);
     }
 
+    public void processGUI(TextureGUI gui) {
+        guis.add(gui);
+    }
+
     public void render(Camera camera, Light light) {
         prepare();
         Matrix4f viewMatrix = Matrix4f.createViewMatrix(camera);
@@ -83,6 +93,10 @@ public class Renderer {
         terrainRenderer.render(terrains);
         terrainShader.stop();
 
+        guiShader.start();
+        guiRenderer.render(guis);
+        guiShader.stop();
+
         entities.clear();
         terrains.clear();
     }
@@ -96,6 +110,7 @@ public class Renderer {
     public void clean() {
         entityShader.clean();
         terrainShader.clean();
+        guiShader.clean();
     }
 
 }

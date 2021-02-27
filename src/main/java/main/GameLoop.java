@@ -3,6 +3,7 @@ package main;
 import model.*;
 import render_engine.*;
 import utils.OBJLoader;
+import utils.math.Vector2f;
 import utils.math.Vector3f;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class GameLoop {
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
-        Renderer renderer = new Renderer();
+        Renderer renderer = new Renderer(loader);
 
         Texture blendMap = new Texture(loader.loadTexture("blendMap"));
         Texture backgroundTexture = new Texture(loader.loadTexture("grass"));
@@ -54,6 +55,9 @@ public class GameLoop {
         camera.setPitch(3);
         Light light = new Light(new Vector3f(100, 100, 100), new Vector3f(1, 1, 1));
 
+        TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
+                new Vector2f(0.2f, 0.2f));
+
         while (!DisplayManager.windowShouldClose()) {
             camera.move();
             dragon.move(terrain);
@@ -62,6 +66,7 @@ public class GameLoop {
             renderer.processEntity(dragon);
             for (Entity fern : ferns)
                 renderer.processEntity(fern);
+            renderer.processGUI(healthGUI);
 
             renderer.render(camera, light);
             DisplayManager.updateDisplay();

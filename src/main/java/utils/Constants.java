@@ -17,6 +17,10 @@ public class Constants {
             "\\java\\shader\\terrainVertexShader.txt";
     public static final String TERRAIN_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
             "\\java\\shader\\terrainFragmentShader.txt";
+    public static final String GUI_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\guiVertexShader.txt";
+    public static final String GUI_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\guiFragmentShader.txt";
     public static final String RES_FOLDER = "res";
 
     // Scene

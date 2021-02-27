@@ -112,11 +112,25 @@ public class Matrix4f {
         dest.m13 = t13;
     }
 
+    public static void translate(Vector2f vec, Matrix4f src, Matrix4f dest) {
+        dest.m30 += src.m00 * vec.x + src.m10 * vec.y;
+        dest.m31 += src.m01 * vec.x + src.m11 * vec.y;
+        dest.m32 += src.m02 * vec.x + src.m12 * vec.y;
+        dest.m33 += src.m03 * vec.x + src.m13 * vec.y;
+    }
+
     public static void translate(Vector3f vec, Matrix4f src, Matrix4f dest) {
         dest.m30 += src.m00 * vec.x + src.m10 * vec.y + src.m20 * vec.z;
         dest.m31 += src.m01 * vec.x + src.m11 * vec.y + src.m21 * vec.z;
         dest.m32 += src.m02 * vec.x + src.m12 * vec.y + src.m22 * vec.z;
         dest.m33 += src.m03 * vec.x + src.m13 * vec.y + src.m23 * vec.z;
+    }
+
+    public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
+        Matrix4f matrix = new Matrix4f();
+        Matrix4f.translate(translation, matrix, matrix);
+        Matrix4f.scale(new Vector3f(scale.x, scale.y, 1f), matrix, matrix);
+        return matrix;
     }
 
     public static Matrix4f createTransformationMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
