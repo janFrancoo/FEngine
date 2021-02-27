@@ -18,7 +18,7 @@ public class Player extends Entity {
         super(texturedModel, position, rotX, rotY, rotZ, scale);
     }
 
-    public void move() {
+    public void move(Terrain terrain) {
         checkInputs();
         super.increaseRotation(0, (float) (currentTurnSpeed * DisplayManager.getDelta()), 0);
         float distance = (float) (currentRunSpeed * DisplayManager.getDelta());
@@ -27,9 +27,10 @@ public class Player extends Entity {
         super.increasePosition(new Vector3f(dx, 0, dz));
         currentUpwardsSpeed += GRAVITY * DisplayManager.getDelta();
         super.increasePosition(new Vector3f(0, (float) (currentUpwardsSpeed * DisplayManager.getDelta()), 0));
-        if (super.getPosition().y < 0) {
+        float terrainHeight = terrain.getHeight(super.getPosition().x, super.getPosition().z);
+        if (super.getPosition().y < terrainHeight) {
             currentUpwardsSpeed = 0;
-            super.getPosition().y = 0;
+            super.getPosition().y = terrainHeight;
             isJumping = false;
         }
     }

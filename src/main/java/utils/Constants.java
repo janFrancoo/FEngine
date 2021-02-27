@@ -27,11 +27,11 @@ public class Constants {
     // Game Settings
     // Terrain
     public static final float TERRAIN_SIZE = 800;
-    public static final float TERRAIN_MAX_HEIGHT = 40;
+    public static final float TERRAIN_MAX_HEIGHT = 80;
     public static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
     // Fog
     public static final float FOG_DENSITY = 0.005f;
-    public static final float FOG_GRADIENT = 1.5f;
+    public static final float FOG_GRADIENT = 1.3f;
     public static final Vector3f SKY_COLOR = new Vector3f(0.75f, 0.75f, 0.75f);
     // Player
     public static final float RUN_SPEED = 20;
