@@ -1,13 +1,15 @@
 package model;
 
+import utils.math.Vector2f;
 import utils.math.Vector3f;
 
 public class Entity {
 
-    private TexturedModel texturedModel;
     private Vector3f position;
     private float rotX, rotY, rotZ;
     private float scale;
+    private TexturedModel texturedModel;
+    private int textureIdx = 0;
 
     public Entity(TexturedModel texturedModel, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
         this.texturedModel = texturedModel;
@@ -16,6 +18,26 @@ public class Entity {
         this.rotY = rotY;
         this.rotZ = rotZ;
         this.scale = scale;
+    }
+
+    public Entity(TexturedModel texturedModel, int textureIdx, Vector3f position,
+                  float rotX, float rotY, float rotZ, float scale) {
+        this.texturedModel = texturedModel;
+        this.textureIdx = textureIdx;
+        this.position = position;
+        this.rotX = rotX;
+        this.rotY = rotY;
+        this.rotZ = rotZ;
+        this.scale = scale;
+    }
+
+    public Vector2f getTextureOffset() {
+        int rows = texturedModel.getTexture().getRows();
+        int column = textureIdx % rows;
+        int row = textureIdx / rows;
+        return new Vector2f(
+                (float) column / (float) texturedModel.getTexture().getRows(),
+                (float) row / (float) texturedModel.getTexture().getRows());
     }
 
     public void increasePosition(Vector3f dPos) {

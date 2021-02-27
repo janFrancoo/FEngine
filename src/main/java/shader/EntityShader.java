@@ -2,6 +2,7 @@ package shader;
 
 import model.Light;
 import utils.math.Matrix4f;
+import utils.math.Vector2f;
 import utils.math.Vector3f;
 
 import static utils.Constants.FRAGMENT_SHADER_FILE;
@@ -20,6 +21,8 @@ public class EntityShader extends Shader {
     private int locationFogDensity;
     private int locationFogGradient;
     private int locationSkyColor;
+    private int locationTextureRows;
+    private int locationTextureOffset;
 
     public EntityShader() {
         super(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
@@ -38,6 +41,8 @@ public class EntityShader extends Shader {
         locationFogDensity = super.getUniformLocation("density");
         locationFogGradient = super.getUniformLocation("gradient");
         locationSkyColor = super.getUniformLocation("skyColor");
+        locationTextureRows = super.getUniformLocation("textureRows");
+        locationTextureOffset = super.getUniformLocation("textureOffset");
     }
 
     @Override
@@ -80,6 +85,14 @@ public class EntityShader extends Shader {
 
     public void loadSkyColor(Vector3f color) {
         super.loadVector(locationSkyColor, color);
+    }
+
+    public void loadTextureRows(int rows) {
+        super.loadFloat(locationTextureRows, rows);
+    }
+
+    public void loadTextureOffset(Vector2f textureOffset) {
+        super.loadVector(locationTextureOffset, textureOffset);
     }
 
 }

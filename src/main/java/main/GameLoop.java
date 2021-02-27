@@ -37,15 +37,17 @@ public class GameLoop {
         Player dragon = new Player(texturedDragon, new Vector3f(0, 0, -30), 0, 180, 0, 1);
 
         RawModel rawFern = OBJLoader.loadOBJModel("fern", loader);
-        Texture textureFern = new Texture(loader.loadTexture("fern"));
-        textureFern.setTransparent(true);
-        textureFern.setFakeLight(true);
-        TexturedModel texturedFern = new TexturedModel(rawFern, textureFern);
+        Texture fernTextureAtlas = new Texture(loader.loadTexture("fern"));
+        fernTextureAtlas.setTransparent(true);
+        fernTextureAtlas.setFakeLight(true);
+        fernTextureAtlas.setRows(2);
+        TexturedModel texturedFern = new TexturedModel(rawFern, fernTextureAtlas);
         List<Entity> ferns = new ArrayList<>();
         for (int i=0; i<250; i++) {
             float x = random.nextInt((int) TERRAIN_SIZE);
             float z = random.nextInt((int) TERRAIN_SIZE) * -1;
-            ferns.add(new Entity(texturedFern, new Vector3f(x, terrain.getHeight(x, z), z), 0, 0, 0, 1));
+            ferns.add(new Entity(texturedFern, random.nextInt(4),
+                    new Vector3f(x, terrain.getHeight(x, z), z), 0, 0, 0, 1));
         }
 
         Camera camera = new Camera(dragon);

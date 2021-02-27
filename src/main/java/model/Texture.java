@@ -7,6 +7,7 @@ public class Texture {
     private float reflectivity = 0;
     private boolean transparent = false;
     private boolean fakeLight = false;
+    private int rows = 1;
 
     public Texture(int textureID) {
         this.textureID = textureID;
@@ -46,6 +47,14 @@ public class Texture {
 
     public void setFakeLight(boolean fakeLight) {
         this.fakeLight = fakeLight;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
     }
 
 }
