@@ -14,6 +14,17 @@ public class Vector3f {
         this.z = z;
     }
 
+    public void normalise() {
+        float vectorLength = length();
+        x /= vectorLength;
+        y /= vectorLength;
+        z /= vectorLength;
+    }
+
+    public float length() {
+        return (float) Math.sqrt(x * x + y * y + z * z);
+    }
+
     @Override
     public String toString() {
         return "Vector3f{" +

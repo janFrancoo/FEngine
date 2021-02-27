@@ -58,11 +58,11 @@ public class GameLoop {
         Texture gTexture = new Texture(loader.loadTexture("pinkFlowers"));
         Texture bTexture = new Texture(loader.loadTexture("path"));
         TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-        Terrain terrain = new Terrain(0, -1, loader, terrainTexturePack, blendMap);
+        Terrain terrain = new Terrain(0, -1, loader, terrainTexturePack, blendMap, "heightMap");
 
         Camera camera = new Camera(dragon);
         camera.setPitch(3);
-        Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
+        Light light = new Light(new Vector3f(0, 50, 0), new Vector3f(1, 1, 1));
 
         while (!DisplayManager.windowShouldClose()) {
             camera.move();
