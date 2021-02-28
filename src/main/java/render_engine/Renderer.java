@@ -7,6 +7,7 @@ import shader.GUIShader;
 import shader.SkyboxShader;
 import shader.TerrainShader;
 import utils.math.Matrix4f;
+import utils.math.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ public class Renderer {
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private final List<Terrain> terrains = new ArrayList<>();
     private final List<TextureGUI> guis = new ArrayList<>();
+
+    private float skyBoxRotation = 0;
 
     public Renderer(ModelLoader loader) {
         entityShader = new EntityShader();
@@ -108,6 +111,8 @@ public class Renderer {
         viewMatrix.m30 = 0;
         viewMatrix.m31 = 0;
         viewMatrix.m32 = 0;
+        skyBoxRotation += SKYBOX_ROTATE_SPEED * DisplayManager.getDelta();
+        Matrix4f.rotate((float) Math.toRadians(skyBoxRotation), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);
         skyboxShader.loadViewMatrix(viewMatrix);
         skyboxRenderer.render();
         skyboxShader.stop();

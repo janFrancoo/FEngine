@@ -43,6 +43,8 @@ public class Constants {
     public static final float FOG_DENSITY = 0.005f;
     public static final float FOG_GRADIENT = 1.3f;
     public static final Vector3f SKY_COLOR = new Vector3f(0.5444f, 0.62f, 0.69f);
+    // Skybox
+    public static final float SKYBOX_ROTATE_SPEED = 1f;
     // Player
     public static final float RUN_SPEED = 20;
     public static final float TURN_SPEED = 40;
