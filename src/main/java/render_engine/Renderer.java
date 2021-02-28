@@ -77,18 +77,18 @@ public class Renderer {
         guis.add(gui);
     }
 
-    public void render(Camera camera, Light light) {
+    public void render(Camera camera, List<Light> lights) {
         prepare();
         Matrix4f viewMatrix = Matrix4f.createViewMatrix(camera);
 
         entityShader.start();
-        entityShader.loadLight(light);
+        entityShader.loadLights(lights);
         entityShader.loadViewMatrix(viewMatrix);
         entityRenderer.render(entities);
         entityShader.stop();
 
         terrainShader.start();
-        terrainShader.loadLight(light);
+        terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
         terrainRenderer.render(terrains);
         terrainShader.stop();

@@ -33,6 +33,8 @@ public class Constants {
     public static final float TERRAIN_SIZE = 800;
     public static final float TERRAIN_MAX_HEIGHT = 80;
     public static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
+    // Light
+    public static final int MAX_LIGHT = 4;
     // Fog
     public static final float FOG_DENSITY = 0.005f;
     public static final float FOG_GRADIENT = 1.3f;
