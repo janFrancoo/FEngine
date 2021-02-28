@@ -54,9 +54,13 @@ public class GameLoop {
         Camera camera = new Camera(dragon);
         camera.setPitch(3);
         List<Light> lights = new ArrayList<>();
-        lights.add(new Light(new Vector3f(0, 10000, -7000), new Vector3f(1, 1, 1)));
-        lights.add(new Light(new Vector3f(-200, 10, -200), new Vector3f(10, 1, 1)));
-        lights.add(new Light(new Vector3f(200, 10, 200), new Vector3f(1, 1, 10)));
+        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f))); // Sun
+        lights.add(new Light(new Vector3f(200, 10, -300), new Vector3f(2, 0, 0),
+                new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(350, 20, -300), new Vector3f(0, 2, 2),
+                new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(300, 5, -300), new Vector3f(2, 2, 0),
+                new Vector3f(1, 0.01f, 0.002f)));
 
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
