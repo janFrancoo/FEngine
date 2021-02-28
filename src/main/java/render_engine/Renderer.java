@@ -4,6 +4,7 @@ import model.*;
 import org.lwjgl.opengl.GL11;
 import shader.EntityShader;
 import shader.GUIShader;
+import shader.SkyboxShader;
 import shader.TerrainShader;
 import utils.math.Matrix4f;
 
@@ -19,9 +20,11 @@ public class Renderer {
     private final EntityRenderer entityRenderer;
     private final TerrainRenderer terrainRenderer;
     private final GUIRenderer guiRenderer;
+    private final SkyboxRenderer skyboxRenderer;
     private final EntityShader entityShader;
     private final TerrainShader terrainShader;
     private final GUIShader guiShader;
+    private final SkyboxShader skyboxShader;
 
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private final List<Terrain> terrains = new ArrayList<>();
@@ -30,10 +33,13 @@ public class Renderer {
     public Renderer(ModelLoader loader) {
         entityShader = new EntityShader();
         terrainShader = new TerrainShader();
-        guiRenderer = new GUIRenderer(loader);
+        guiShader = new GUIShader();
+        skyboxShader = new SkyboxShader();
+
         entityRenderer = new EntityRenderer(entityShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
-        guiShader = new GUIShader();
+        guiRenderer = new GUIRenderer(guiShader, loader);
+        skyboxRenderer = new SkyboxRenderer(loader);
 
         enableCulling();
 
@@ -46,6 +52,10 @@ public class Renderer {
         terrainShader.start();
         terrainShader.loadProjectionMatrix(projectionMatrix);
         terrainShader.stop();
+
+        skyboxShader.start();
+        skyboxShader.loadProjectionMatrix(projectionMatrix);
+        skyboxShader.stop();
     }
 
     public static void enableCulling() {
@@ -93,6 +103,15 @@ public class Renderer {
         terrainRenderer.render(terrains);
         terrainShader.stop();
 
+        skyboxShader.start();
+        // Disabling translation
+        viewMatrix.m30 = 0;
+        viewMatrix.m31 = 0;
+        viewMatrix.m32 = 0;
+        skyboxShader.loadViewMatrix(viewMatrix);
+        skyboxRenderer.render();
+        skyboxShader.stop();
+
         guiShader.start();
         guiRenderer.render(guis);
         guiShader.stop();
@@ -112,6 +131,7 @@ public class Renderer {
         entityShader.clean();
         terrainShader.clean();
         guiShader.clean();
+        skyboxShader.clean();
     }
 
 }

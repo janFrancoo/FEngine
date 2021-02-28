@@ -21,6 +21,10 @@ public class Constants {
             "\\java\\shader\\guiVertexShader.txt";
     public static final String GUI_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
             "\\java\\shader\\guiFragmentShader.txt";
+    public static final String SKYBOX_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\skyboxVertexShader.txt";
+    public static final String SKYBOX_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\skyboxFragmentShader.txt";
     public static final String RES_FOLDER = "res";
 
     // Scene
@@ -38,7 +42,7 @@ public class Constants {
     // Fog
     public static final float FOG_DENSITY = 0.005f;
     public static final float FOG_GRADIENT = 1.3f;
-    public static final Vector3f SKY_COLOR = new Vector3f(0.75f, 0.75f, 0.75f);
+    public static final Vector3f SKY_COLOR = new Vector3f(0.5444f, 0.62f, 0.69f);
     // Player
     public static final float RUN_SPEED = 20;
     public static final float TURN_SPEED = 40;

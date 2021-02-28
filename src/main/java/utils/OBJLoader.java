@@ -6,7 +6,6 @@ import utils.math.Vector2f;
 import utils.math.Vector3f;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -15,10 +14,10 @@ import java.util.List;
 public class OBJLoader {
 
     public static RawModel loadOBJModel(String fileName, ModelLoader loader) {
-        FileReader fileReader = null;
+        FileReader fileReader;
 
         try {
-            fileReader = new FileReader(new File(Constants.RES_FOLDER + "/" + fileName + ".obj"));
+            fileReader = new FileReader(Constants.RES_FOLDER + "/" + fileName + ".obj");
         } catch (FileNotFoundException e) {
             System.err.println("Could not load the file: " + fileName + ".obj");
             e.printStackTrace();
@@ -33,10 +32,10 @@ public class OBJLoader {
         List<Vector3f> normals = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
 
-        float[] verticesArray = null;
-        float[] normalsArray = null;
-        float[] texturesArray = null;
-        int[] indicesArray = null;
+        float[] verticesArray;
+        float[] normalsArray;
+        float[] texturesArray;
+        int[] indicesArray;
 
         try {
             while (true) {

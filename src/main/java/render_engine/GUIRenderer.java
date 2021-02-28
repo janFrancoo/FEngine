@@ -15,15 +15,15 @@ public class GUIRenderer {
     private final RawModel quad;
     private final GUIShader guiShader;
 
-    public GUIRenderer(ModelLoader loader) {
+    public GUIRenderer(GUIShader guiShader, ModelLoader loader) {
         float[] positions = {
                 -1, 1,
                 -1, -1,
                 1, 1,
                 1, -1
         };
-        quad = loader.loadToVao(positions);
-        guiShader = new GUIShader();
+        quad = loader.loadToVao(positions, 2);
+        this.guiShader = guiShader;
     }
 
     public void render(List<TextureGUI> guis) {
