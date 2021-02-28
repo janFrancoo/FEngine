@@ -2,3 +2,4 @@ res/
 out/
 .idea/
 target/
+*.log

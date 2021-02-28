@@ -5,13 +5,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import shader.SkyboxShader;
+
+import static utils.Constants.SKY_COLOR;
 
 public class SkyboxRenderer {
 
     private final RawModel model;
     private final int textureId;
 
-    public SkyboxRenderer(ModelLoader loader) {
+    public SkyboxRenderer(SkyboxShader shader, ModelLoader loader) {
         float SIZE = 500f;
         float[] VERTICES = {
                 -SIZE, SIZE, -SIZE,
@@ -59,6 +62,9 @@ public class SkyboxRenderer {
 
         model = loader.loadToVao(VERTICES, 3);
         textureId = loader.loadCubeMap(new String[] {"right", "left", "top", "bottom", "back", "front"});
+        shader.start();
+        shader.loadFogColor(SKY_COLOR);
+        shader.stop();
     }
 
     public void render() {

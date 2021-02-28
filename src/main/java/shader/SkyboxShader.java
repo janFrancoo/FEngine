@@ -1,6 +1,7 @@
 package shader;
 
 import utils.math.Matrix4f;
+import utils.math.Vector3f;
 
 import static utils.Constants.SKYBOX_FRAGMENT_SHADER_FILE;
 import static utils.Constants.SKYBOX_VERTEX_SHADER_FILE;
@@ -9,6 +10,7 @@ public class SkyboxShader extends Shader {
 
     private int locationProjectionMatrix;
     private int locationViewMatrix;
+    private int locationFogColor;
 
     public SkyboxShader() {
         super(SKYBOX_VERTEX_SHADER_FILE, SKYBOX_FRAGMENT_SHADER_FILE);
@@ -18,6 +20,7 @@ public class SkyboxShader extends Shader {
     protected void getAllUniformLocations() {
         locationProjectionMatrix = super.getUniformLocation("projectionMatrix");
         locationViewMatrix = super.getUniformLocation("viewMatrix");
+        locationFogColor = super.getUniformLocation("fogColor");
     }
 
     @Override
@@ -31,6 +34,10 @@ public class SkyboxShader extends Shader {
 
     public void loadViewMatrix(Matrix4f matrix) {
         super.loadMatrix(locationViewMatrix, matrix);
+    }
+
+    public void loadFogColor(Vector3f fogColor) {
+        super.loadVector(locationFogColor, fogColor);
     }
 
 }

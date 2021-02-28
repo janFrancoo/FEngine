@@ -39,7 +39,7 @@ public class Renderer {
         entityRenderer = new EntityRenderer(entityShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
         guiRenderer = new GUIRenderer(guiShader, loader);
-        skyboxRenderer = new SkyboxRenderer(loader);
+        skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
 
         enableCulling();
 
