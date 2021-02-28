@@ -21,10 +21,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 public class DisplayManager {
 
     private static long window;
-    private static int frameCount = 0;
-    private static double currentTime = glfwGetTime();
     private static double prevTime = glfwGetTime();
-    private static double prevTimeForFPS = glfwGetTime();
     private static double delta;
 
     public static void createDisplay() {
@@ -68,7 +65,7 @@ public class DisplayManager {
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        currentTime = glfwGetTime();
+        double currentTime = glfwGetTime();
         delta = currentTime - prevTime;
         prevTime = currentTime;
 
@@ -80,13 +77,7 @@ public class DisplayManager {
     }
 
     private static void calculateFPS() {
-        frameCount++;
-
-        if (currentTime - prevTimeForFPS >= 1.0) {
-            System.out.println("FPS: " + frameCount);
-            frameCount = 0;
-            prevTimeForFPS = currentTime;
-        }
+        glfwSetWindowTitle(window, Constants.TITLE + " FPS: " + Math.round(1f / delta));
     }
 
     public static double getDelta() {

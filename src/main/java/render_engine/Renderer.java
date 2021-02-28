@@ -99,6 +99,7 @@ public class Renderer {
 
         entities.clear();
         terrains.clear();
+        guis.clear();
     }
 
     private void prepare() {
