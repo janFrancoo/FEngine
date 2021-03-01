@@ -1,8 +1,5 @@
 package utils.math;
 
-import model.Camera;
-import utils.Constants;
-
 import java.nio.FloatBuffer;
 
 public class Matrix4f {
@@ -126,47 +123,111 @@ public class Matrix4f {
         dest.m33 += src.m03 * vec.x + src.m13 * vec.y + src.m23 * vec.z;
     }
 
-    public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
-        Matrix4f matrix = new Matrix4f();
-        Matrix4f.translate(translation, matrix, matrix);
-        Matrix4f.scale(new Vector3f(scale.x, scale.y, 1f), matrix, matrix);
-        return matrix;
+    public float determinant() {
+        float f =
+                m00
+                        * ((m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32)
+                        - m13 * m22 * m31
+                        - m11 * m23 * m32
+                        - m12 * m21 * m33);
+        f -= m01
+                * ((m10 * m22 * m33 + m12 * m23 * m30 + m13 * m20 * m32)
+                - m13 * m22 * m30
+                - m10 * m23 * m32
+                - m12 * m20 * m33);
+        f += m02
+                * ((m10 * m21 * m33 + m11 * m23 * m30 + m13 * m20 * m31)
+                - m13 * m21 * m30
+                - m10 * m23 * m31
+                - m11 * m20 * m33);
+        f -= m03
+                * ((m10 * m21 * m32 + m11 * m22 * m30 + m12 * m20 * m31)
+                - m12 * m21 * m30
+                - m10 * m22 * m31
+                - m11 * m20 * m32);
+        return f;
     }
 
-    public static Matrix4f createTransformationMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
-        Matrix4f matrix = new Matrix4f();
-        Matrix4f.translate(translation, matrix, matrix);
-        Matrix4f.rotate((float) Math.toRadians(rx), new Vector3f(1, 0, 0), matrix, matrix);
-        Matrix4f.rotate((float) Math.toRadians(ry), new Vector3f(0, 1, 0), matrix, matrix);
-        Matrix4f.rotate((float) Math.toRadians(rz), new Vector3f(0, 0, 1), matrix, matrix);
-        Matrix4f.scale(new Vector3f(scale, scale, scale), matrix, matrix);
-        return matrix;
+    private static float determinant3x3(float t00, float t01, float t02,
+                                        float t10, float t11, float t12,
+                                        float t20, float t21, float t22) {
+        return   t00 * (t11 * t22 - t12 * t21)
+                + t01 * (t12 * t20 - t10 * t22)
+                + t02 * (t10 * t21 - t11 * t20);
     }
 
-    public static Matrix4f createProjectionMatrix() {
-        float aspectRatio = (float) Constants.WIDTH / (float) Constants.HEIGHT;
-        float yScale = (float) ((1f / Math.tan(Math.toRadians(Constants.FOV / 2f))) * aspectRatio);
-        float xScale = yScale / aspectRatio;
-        float frustumLen = Constants.FAR_PLANE - Constants.NEAR_PLANE;
+    public static Matrix4f invert(Matrix4f src, Matrix4f dest) {
+        float determinant = src.determinant();
 
-        Matrix4f matrix = new Matrix4f();
-        matrix.m00 = xScale;
-        matrix.m11 = yScale;
-        matrix.m22 = -((Constants.FAR_PLANE + Constants.NEAR_PLANE) / frustumLen);
-        matrix.m23 = -1;
-        matrix.m32 = -((2 * Constants.NEAR_PLANE * Constants.FAR_PLANE) / frustumLen);
-        matrix.m33 = 0;
-        return matrix;
+        if (determinant != 0) {
+            /*
+             * m00 m01 m02 m03
+             * m10 m11 m12 m13
+             * m20 m21 m22 m23
+             * m30 m31 m32 m33
+             */
+            if (dest == null)
+                dest = new Matrix4f();
+            float determinant_inv = 1f/determinant;
+
+            // first row
+            float t00 =  determinant3x3(src.m11, src.m12, src.m13, src.m21, src.m22, src.m23, src.m31, src.m32, src.m33);
+            float t01 = -determinant3x3(src.m10, src.m12, src.m13, src.m20, src.m22, src.m23, src.m30, src.m32, src.m33);
+            float t02 =  determinant3x3(src.m10, src.m11, src.m13, src.m20, src.m21, src.m23, src.m30, src.m31, src.m33);
+            float t03 = -determinant3x3(src.m10, src.m11, src.m12, src.m20, src.m21, src.m22, src.m30, src.m31, src.m32);
+            // second row
+            float t10 = -determinant3x3(src.m01, src.m02, src.m03, src.m21, src.m22, src.m23, src.m31, src.m32, src.m33);
+            float t11 =  determinant3x3(src.m00, src.m02, src.m03, src.m20, src.m22, src.m23, src.m30, src.m32, src.m33);
+            float t12 = -determinant3x3(src.m00, src.m01, src.m03, src.m20, src.m21, src.m23, src.m30, src.m31, src.m33);
+            float t13 =  determinant3x3(src.m00, src.m01, src.m02, src.m20, src.m21, src.m22, src.m30, src.m31, src.m32);
+            // third row
+            float t20 =  determinant3x3(src.m01, src.m02, src.m03, src.m11, src.m12, src.m13, src.m31, src.m32, src.m33);
+            float t21 = -determinant3x3(src.m00, src.m02, src.m03, src.m10, src.m12, src.m13, src.m30, src.m32, src.m33);
+            float t22 =  determinant3x3(src.m00, src.m01, src.m03, src.m10, src.m11, src.m13, src.m30, src.m31, src.m33);
+            float t23 = -determinant3x3(src.m00, src.m01, src.m02, src.m10, src.m11, src.m12, src.m30, src.m31, src.m32);
+            // fourth row
+            float t30 = -determinant3x3(src.m01, src.m02, src.m03, src.m11, src.m12, src.m13, src.m21, src.m22, src.m23);
+            float t31 =  determinant3x3(src.m00, src.m02, src.m03, src.m10, src.m12, src.m13, src.m20, src.m22, src.m23);
+            float t32 = -determinant3x3(src.m00, src.m01, src.m03, src.m10, src.m11, src.m13, src.m20, src.m21, src.m23);
+            float t33 =  determinant3x3(src.m00, src.m01, src.m02, src.m10, src.m11, src.m12, src.m20, src.m21, src.m22);
+
+            // transpose and divide by the determinant
+            dest.m00 = t00*determinant_inv;
+            dest.m11 = t11*determinant_inv;
+            dest.m22 = t22*determinant_inv;
+            dest.m33 = t33*determinant_inv;
+            dest.m01 = t10*determinant_inv;
+            dest.m10 = t01*determinant_inv;
+            dest.m20 = t02*determinant_inv;
+            dest.m02 = t20*determinant_inv;
+            dest.m12 = t21*determinant_inv;
+            dest.m21 = t12*determinant_inv;
+            dest.m03 = t30*determinant_inv;
+            dest.m30 = t03*determinant_inv;
+            dest.m13 = t31*determinant_inv;
+            dest.m31 = t13*determinant_inv;
+            dest.m32 = t23*determinant_inv;
+            dest.m23 = t32*determinant_inv;
+            return dest;
+        } else
+            return null;
     }
 
-    public static Matrix4f createViewMatrix(Camera camera) {
-        Matrix4f matrix = new Matrix4f();
-        Matrix4f.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0), matrix, matrix);
-        Matrix4f.rotate((float) Math.toRadians(camera.getYaw()), new Vector3f(0, 1, 0), matrix, matrix);
-        Vector3f cameraPos = camera.getPosition();
-        Vector3f negativeCameraPos = new Vector3f(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-        Matrix4f.translate(negativeCameraPos, matrix, matrix);
-        return matrix;
+    public static Vector4f transform(Matrix4f left, Vector4f right, Vector4f dest) {
+        if (dest == null)
+            dest = new Vector4f();
+
+        float x = left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w;
+        float y = left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w;
+        float z = left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w;
+        float w = left.m03 * right.x + left.m13 * right.y + left.m23 * right.z + left.m33 * right.w;
+
+        dest.x = x;
+        dest.y = y;
+        dest.z = z;
+        dest.w = w;
+
+        return dest;
     }
 
 }

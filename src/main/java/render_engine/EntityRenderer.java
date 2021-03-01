@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import shader.EntityShader;
+import utils.math.GameMath;
 import utils.math.Matrix4f;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class EntityRenderer {
     }
 
     private void prepareInstance(Entity entity) {
-        Matrix4f transformationMatrix = Matrix4f.createTransformationMatrix(entity.getPosition(), entity.getRotX(),
+        Matrix4f transformationMatrix = GameMath.createTransformationMatrix(entity.getPosition(), entity.getRotX(),
                 entity.getRotY(), entity.getRotZ(), entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix);
         shader.loadTextureOffset(entity.getTextureOffset());

@@ -65,9 +65,14 @@ public class GameLoop {
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
 
+        MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+
         while (!DisplayManager.windowShouldClose()) {
-            camera.move();
             dragon.move(terrain);
+            camera.move();
+
+            mousePicker.update();
+            System.out.println(mousePicker.getCurrentRay());
 
             renderer.processTerrain(terrain);
             renderer.processEntity(dragon);

@@ -1,7 +1,7 @@
 package model;
 
 import render_engine.ModelLoader;
-import utils.math.BarryCentric;
+import utils.math.GameMath;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 
@@ -116,11 +116,11 @@ public class Terrain {
         float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
         float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
         if (xCoord <= (1 - zCoord)) {
-            return BarryCentric.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0), new Vector3f(1,
+            return GameMath.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0), new Vector3f(1,
                             heights[gridX + 1][gridZ], 0), new Vector3f(0,
                             heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
         } else {
-             return BarryCentric.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1,
+             return GameMath.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1,
                             heights[gridX + 1][gridZ + 1], 1), new Vector3f(0,
                             heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
         }

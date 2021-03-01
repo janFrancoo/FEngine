@@ -6,16 +6,16 @@ public class CursorInput extends GLFWCursorPosCallback {
 
     public static double dX = 0;
     public static double dY = 0;
-
-    private static double prevPosX = 0, prevPosY = 0;
+    public static double X = 0; // prevX
+    public static double Y = 0; // prevY
 
     @Override
     public void invoke(long window, double xPos, double yPos) {
-        dX = xPos - prevPosX;
-        dY = yPos - prevPosY;
+        dX = xPos - X;
+        dY = yPos - Y;
 
-        prevPosX = xPos;
-        prevPosY = yPos;
+        X = xPos;
+        Y = yPos;
     }
 
 }

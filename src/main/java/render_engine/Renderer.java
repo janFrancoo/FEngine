@@ -6,6 +6,7 @@ import shader.EntityShader;
 import shader.GUIShader;
 import shader.SkyboxShader;
 import shader.TerrainShader;
+import utils.math.GameMath;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
 
@@ -31,6 +32,8 @@ public class Renderer {
     private final List<Terrain> terrains = new ArrayList<>();
     private final List<TextureGUI> guis = new ArrayList<>();
 
+    private final Matrix4f projectionMatrix;
+
     private float skyBoxRotation = 0;
 
     public Renderer(ModelLoader loader) {
@@ -46,7 +49,7 @@ public class Renderer {
 
         enableCulling();
 
-        Matrix4f projectionMatrix = Matrix4f.createProjectionMatrix();
+        projectionMatrix = GameMath.createProjectionMatrix();
 
         entityShader.start();
         entityShader.loadProjectionMatrix(projectionMatrix);
@@ -92,7 +95,7 @@ public class Renderer {
 
     public void render(Camera camera, List<Light> lights) {
         prepare();
-        Matrix4f viewMatrix = Matrix4f.createViewMatrix(camera);
+        Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
         entityShader.start();
         entityShader.loadLights(lights);
@@ -137,6 +140,10 @@ public class Renderer {
         terrainShader.clean();
         guiShader.clean();
         skyboxShader.clean();
+    }
+
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
     }
 
 }
