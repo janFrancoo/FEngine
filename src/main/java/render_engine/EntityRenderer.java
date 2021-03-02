@@ -22,6 +22,7 @@ public class EntityRenderer {
         shader.start();
         shader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
         shader.loadSkyColor(SKY_COLOR);
+        shader.loadCelLevel();
         shader.stop();
     }
 

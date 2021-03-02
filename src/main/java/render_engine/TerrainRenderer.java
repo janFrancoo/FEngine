@@ -24,6 +24,7 @@ public class TerrainRenderer {
         shader.connectTextureUnits();
         shader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
         shader.loadSkyColor(SKY_COLOR);
+        shader.loadCelLevel();
         shader.stop();
     }
 

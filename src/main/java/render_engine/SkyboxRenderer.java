@@ -70,6 +70,7 @@ public class SkyboxRenderer {
         this.shader = shader;
         shader.start();
         shader.loadFogColor(SKY_COLOR);
+        shader.loadCelLevel();
         shader.loadBlendFactor(0.5f);
         shader.connectTextureUnits();
         shader.stop();

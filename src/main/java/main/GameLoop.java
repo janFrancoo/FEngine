@@ -54,7 +54,7 @@ public class GameLoop {
         Camera camera = new Camera(dragon);
         camera.setPitch(3);
         List<Light> lights = new ArrayList<>();
-        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f))); // Sun
+        lights.add(new Light(new Vector3f(0, 10000, -7000), new Vector3f(1, 1, 1))); // Sun
         lights.add(new Light(new Vector3f(200, 10, -300), new Vector3f(2, 0, 0),
                 new Vector3f(1, 0.01f, 0.002f)));
         lights.add(new Light(new Vector3f(350, 20, -300), new Vector3f(0, 2, 2),
@@ -65,14 +65,14 @@ public class GameLoop {
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
 
-        MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+        // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 
         while (!DisplayManager.windowShouldClose()) {
             dragon.move(terrain);
             camera.move();
 
-            mousePicker.update();
-            System.out.println(mousePicker.getCurrentRay());
+            // mousePicker.update();
+            // System.out.println(mousePicker.getCurrentRay());
 
             renderer.processTerrain(terrain);
             renderer.processEntity(dragon);

@@ -3,8 +3,7 @@ package shader;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
 
-import static utils.Constants.SKYBOX_FRAGMENT_SHADER_FILE;
-import static utils.Constants.SKYBOX_VERTEX_SHADER_FILE;
+import static utils.Constants.*;
 
 public class SkyboxShader extends Shader {
 
@@ -14,6 +13,8 @@ public class SkyboxShader extends Shader {
     private int locationBlendFactor;
     private int locationCubeMap;
     private int locationCubeMap2;
+    private int locationCelEnable;
+    private int locationCelLevel;
 
     public SkyboxShader() {
         super(SKYBOX_VERTEX_SHADER_FILE, SKYBOX_FRAGMENT_SHADER_FILE);
@@ -27,6 +28,8 @@ public class SkyboxShader extends Shader {
         locationBlendFactor = super.getUniformLocation("blendFactor");
         locationCubeMap = super.getUniformLocation("cubeMap");
         locationCubeMap2 = super.getUniformLocation("cubeMap2");
+        locationCelEnable = super.getUniformLocation("celEnable");
+        locationCelLevel = super.getUniformLocation("celLevel");
     }
 
     @Override
@@ -53,6 +56,13 @@ public class SkyboxShader extends Shader {
     public void connectTextureUnits() {
         super.loadInt(locationCubeMap, 0);
         super.loadInt(locationCubeMap2, 1);
+    }
+
+    public void loadCelLevel() {
+        if (SKY_CEL_LEVEL != 0) {
+            super.loadBoolean(locationCelEnable, true);
+            super.loadFloat(locationCelLevel, SKY_CEL_LEVEL);
+        }
     }
 
 }

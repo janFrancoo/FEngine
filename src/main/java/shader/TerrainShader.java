@@ -26,6 +26,8 @@ public class TerrainShader extends Shader {
     private int locationGTexture;
     private int locationBTexture;
     private int locationBlendMap;
+    private int locationCelEnable;
+    private int locationCelLevel;
 
     public TerrainShader() {
         super(TERRAIN_VERTEX_SHADER_FILE, TERRAIN_FRAGMENT_SHADER_FILE);
@@ -54,6 +56,8 @@ public class TerrainShader extends Shader {
         locationGTexture = super.getUniformLocation("gTexture");
         locationBTexture = super.getUniformLocation("bTexture");
         locationBlendMap = super.getUniformLocation("blendMap");
+        locationCelEnable = super.getUniformLocation("celEnable");
+        locationCelLevel = super.getUniformLocation("celLevel");
     }
 
     @Override
@@ -103,6 +107,13 @@ public class TerrainShader extends Shader {
 
     public void loadSkyColor(Vector3f color) {
         super.loadVector(locationSkyColor, color);
+    }
+
+    public void loadCelLevel() {
+        if (SKY_CEL_LEVEL != 0) {
+            super.loadBoolean(locationCelEnable, true);
+            super.loadFloat(locationCelLevel, CEL_LEVEL);
+        }
     }
 
 }

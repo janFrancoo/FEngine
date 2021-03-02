@@ -39,6 +39,8 @@ public class Constants {
     public static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
     // Light
     public static final int MAX_LIGHT = 4;
+    public static final float CEL_LEVEL = 3f;
+    public static final float SKY_CEL_LEVEL = 10f;
     // Fog
     public static final float FOG_DENSITY = 0.005f;
     public static final float FOG_GRADIENT = 1.3f;

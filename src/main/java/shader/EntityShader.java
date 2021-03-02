@@ -25,6 +25,8 @@ public class EntityShader extends Shader {
     private int locationSkyColor;
     private int locationTextureRows;
     private int locationTextureOffset;
+    private int locationCelEnable;
+    private int locationCelLevel;
 
     public EntityShader() {
         super(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
@@ -51,6 +53,8 @@ public class EntityShader extends Shader {
         locationSkyColor = super.getUniformLocation("skyColor");
         locationTextureRows = super.getUniformLocation("textureRows");
         locationTextureOffset = super.getUniformLocation("textureOffset");
+        locationCelEnable = super.getUniformLocation("celEnable");
+        locationCelLevel = super.getUniformLocation("celLevel");
     }
 
     @Override
@@ -104,6 +108,13 @@ public class EntityShader extends Shader {
 
     public void loadTextureOffset(Vector2f textureOffset) {
         super.loadVector(locationTextureOffset, textureOffset);
+    }
+
+    public void loadCelLevel() {
+        if (SKY_CEL_LEVEL != 0) {
+            super.loadBoolean(locationCelEnable, true);
+            super.loadFloat(locationCelLevel, CEL_LEVEL);
+        }
     }
 
 }
