@@ -93,20 +93,30 @@ public class Renderer {
         guis.add(gui);
     }
 
-    public void render(Camera camera, List<Light> lights) {
+    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TextureGUI> guis,
+                            Camera camera, List<Light> lights) {
+        for (Entity entity : entities)
+            processEntity(entity);
+
+        for (Terrain terrain : terrains)
+            processTerrain(terrain);
+
+        for (TextureGUI gui : guis)
+            processGUI(gui);
+
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
         entityShader.start();
         entityShader.loadLights(lights);
         entityShader.loadViewMatrix(viewMatrix);
-        entityRenderer.render(entities);
+        entityRenderer.render(this.entities);
         entityShader.stop();
 
         terrainShader.start();
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
-        terrainRenderer.render(terrains);
+        terrainRenderer.render(this.terrains);
         terrainShader.stop();
 
         skyboxShader.start();
@@ -121,12 +131,12 @@ public class Renderer {
         skyboxShader.stop();
 
         guiShader.start();
-        guiRenderer.render(guis);
+        guiRenderer.render(this.guis);
         guiShader.stop();
 
-        entities.clear();
-        terrains.clear();
-        guis.clear();
+        this.entities.clear();
+        this.terrains.clear();
+        this.guis.clear();
     }
 
     private void prepare() {

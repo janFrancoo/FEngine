@@ -22,6 +22,10 @@ public class GameLoop {
         ModelLoader loader = new ModelLoader();
         Renderer renderer = new Renderer(loader);
 
+        List<Entity> entities = new ArrayList<>();
+        List<Terrain> terrains = new ArrayList<>();
+        List<TextureGUI> guis = new ArrayList<>();
+
         Texture blendMap = new Texture(loader.loadTexture("blendMap"));
         Texture backgroundTexture = new Texture(loader.loadTexture("grass"));
         Texture rTexture = new Texture(loader.loadTexture("dirt"));
@@ -29,6 +33,7 @@ public class GameLoop {
         Texture bTexture = new Texture(loader.loadTexture("path"));
         TerrainTexturePack terrainTexturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
         Terrain terrain = new Terrain(0, -1, loader, terrainTexturePack, blendMap, "heightMap");
+        terrains.add(terrain);
 
         RawModel rawDragon = OBJLoader.loadOBJModel("dragon", loader);
         Texture textureDragon = new Texture(loader.loadTexture("stallTexture"));
@@ -36,6 +41,7 @@ public class GameLoop {
         textureDragon.setReflectivity(1);
         TexturedModel texturedDragon = new TexturedModel(rawDragon, textureDragon);
         Player dragon = new Player(texturedDragon, new Vector3f(0, 0, -30), 0, 180, 0, 1);
+        entities.add(dragon);
 
         RawModel rawFern = OBJLoader.loadOBJModel("fern", loader);
         Texture fernTextureAtlas = new Texture(loader.loadTexture("fern"));
@@ -43,11 +49,10 @@ public class GameLoop {
         fernTextureAtlas.setFakeLight(true);
         fernTextureAtlas.setRows(2);
         TexturedModel texturedFern = new TexturedModel(rawFern, fernTextureAtlas);
-        List<Entity> ferns = new ArrayList<>();
         for (int i=0; i<250; i++) {
             float x = random.nextInt((int) TERRAIN_SIZE);
             float z = random.nextInt((int) TERRAIN_SIZE) * -1;
-            ferns.add(new Entity(texturedFern, random.nextInt(4),
+            entities.add(new Entity(texturedFern, random.nextInt(4),
                     new Vector3f(x, terrain.getHeight(x, z), z), 0, 0, 0, 1));
         }
 
@@ -64,6 +69,7 @@ public class GameLoop {
 
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
+        guis.add(healthGUI);
 
         // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 
@@ -74,13 +80,7 @@ public class GameLoop {
             // mousePicker.update();
             // System.out.println(mousePicker.getCurrentRay());
 
-            renderer.processTerrain(terrain);
-            renderer.processEntity(dragon);
-            for (Entity fern : ferns)
-                renderer.processEntity(fern);
-            renderer.processGUI(healthGUI);
-
-            renderer.render(camera, lights);
+            renderer.renderScene(entities, terrains, guis, camera, lights);
             DisplayManager.updateDisplay();
         }
 
