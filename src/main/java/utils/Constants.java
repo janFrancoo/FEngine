@@ -25,6 +25,10 @@ public class Constants {
             "\\java\\shader\\skyboxVertexShader.txt";
     public static final String SKYBOX_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
             "\\java\\shader\\skyboxFragmentShader.txt";
+    public static final String WATER_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\waterVertexShader.txt";
+    public static final String WATER_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\waterFragmentShader.txt";
     public static final String RES_FOLDER = "res";
 
     // Scene
@@ -37,6 +41,7 @@ public class Constants {
     public static final float TERRAIN_SIZE = 800;
     public static final float TERRAIN_MAX_HEIGHT = 80;
     public static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
+    public static final float TILE_SIZE = 60;
     // Light
     public static final int MAX_LIGHT = 4;
     public static final float CEL_LEVEL = 3f;

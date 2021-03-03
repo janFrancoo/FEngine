@@ -25,6 +25,7 @@ public class GameLoop {
         List<Entity> entities = new ArrayList<>();
         List<Terrain> terrains = new ArrayList<>();
         List<TextureGUI> guis = new ArrayList<>();
+        List<WaterTile> waterTiles = new ArrayList<>();
 
         Texture blendMap = new Texture(loader.loadTexture("blendMap"));
         Texture backgroundTexture = new Texture(loader.loadTexture("grass"));
@@ -71,6 +72,9 @@ public class GameLoop {
                 new Vector2f(0.2f, 0.2f));
         guis.add(healthGUI);
 
+        WaterTile waterTile = new WaterTile(75, -75, 0);
+        waterTiles.add(waterTile);
+
         // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 
         while (!DisplayManager.windowShouldClose()) {
@@ -80,11 +84,10 @@ public class GameLoop {
             // mousePicker.update();
             // System.out.println(mousePicker.getCurrentRay());
 
-            renderer.renderScene(entities, terrains, guis, camera, lights);
+            renderer.renderScene(entities, terrains, guis, waterTiles, camera, lights);
             DisplayManager.updateDisplay();
         }
 
-        loader.clean();
         renderer.clean();
         DisplayManager.closeDisplay();
     }

@@ -2,10 +2,7 @@ package render_engine;
 
 import model.*;
 import org.lwjgl.opengl.GL11;
-import shader.EntityShader;
-import shader.GUIShader;
-import shader.SkyboxShader;
-import shader.TerrainShader;
+import shader.*;
 import utils.math.GameMath;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
@@ -19,6 +16,8 @@ import static utils.Constants.*;
 
 public class Renderer {
 
+    private final ModelLoader loader;
+
     private final EntityRenderer entityRenderer;
     private final TerrainRenderer terrainRenderer;
     private final GUIRenderer guiRenderer;
@@ -27,25 +26,32 @@ public class Renderer {
     private final TerrainShader terrainShader;
     private final GUIShader guiShader;
     private final SkyboxShader skyboxShader;
+    private final WaterShader waterShader;
+    private final WaterRenderer waterRenderer;
 
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private final List<Terrain> terrains = new ArrayList<>();
     private final List<TextureGUI> guis = new ArrayList<>();
+    private final List<WaterTile> waterTiles = new ArrayList<>();
 
     private final Matrix4f projectionMatrix;
 
     private float skyBoxRotation = 0;
 
     public Renderer(ModelLoader loader) {
+        this.loader = loader;
+
         entityShader = new EntityShader();
         terrainShader = new TerrainShader();
         guiShader = new GUIShader();
         skyboxShader = new SkyboxShader();
+        waterShader = new WaterShader();
 
         entityRenderer = new EntityRenderer(entityShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
         guiRenderer = new GUIRenderer(guiShader, loader);
         skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
+        waterRenderer = new WaterRenderer(waterShader, loader);
 
         enableCulling();
 
@@ -62,6 +68,10 @@ public class Renderer {
         skyboxShader.start();
         skyboxShader.loadProjectionMatrix(projectionMatrix);
         skyboxShader.stop();
+
+        waterShader.start();
+        waterShader.loadProjectionMatrix(projectionMatrix);
+        waterShader.stop();
     }
 
     public static void enableCulling() {
@@ -93,8 +103,12 @@ public class Renderer {
         guis.add(gui);
     }
 
+    public void processWaterTile(WaterTile waterTile) {
+        waterTiles.add(waterTile);
+    }
+
     public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                            Camera camera, List<Light> lights) {
+                            List<WaterTile> waterTiles, Camera camera, List<Light> lights) {
         for (Entity entity : entities)
             processEntity(entity);
 
@@ -104,6 +118,18 @@ public class Renderer {
         for (TextureGUI gui : guis)
             processGUI(gui);
 
+        for (WaterTile waterTile : waterTiles)
+            processWaterTile(waterTile);
+
+        render(camera, lights);
+
+        this.entities.clear();
+        this.terrains.clear();
+        this.guis.clear();
+        this.waterTiles.clear();
+    }
+
+    public void render(Camera camera, List<Light> lights) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
@@ -119,6 +145,11 @@ public class Renderer {
         terrainRenderer.render(this.terrains);
         terrainShader.stop();
 
+        waterShader.start();
+        waterShader.loadViewMatrix(viewMatrix);
+        waterRenderer.render(waterTiles);
+        waterShader.stop();
+
         skyboxShader.start();
         // Disabling translation
         viewMatrix.m30 = 0;
@@ -133,10 +164,6 @@ public class Renderer {
         guiShader.start();
         guiRenderer.render(this.guis);
         guiShader.stop();
-
-        this.entities.clear();
-        this.terrains.clear();
-        this.guis.clear();
     }
 
     private void prepare() {
@@ -146,10 +173,12 @@ public class Renderer {
     }
 
     public void clean() {
+        loader.clean();
         entityShader.clean();
         terrainShader.clean();
         guiShader.clean();
         skyboxShader.clean();
+        waterShader.clean();
     }
 
     public Matrix4f getProjectionMatrix() {
