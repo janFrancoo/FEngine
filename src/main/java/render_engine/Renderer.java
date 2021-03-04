@@ -107,6 +107,21 @@ public class Renderer {
         waterTiles.add(waterTile);
     }
 
+    public void renderScene(List<Entity> entities, List<Terrain> terrains, Camera camera, List<Light> lights) {
+        for (Entity entity : entities)
+            processEntity(entity);
+
+        for (Terrain terrain : terrains)
+            processTerrain(terrain);
+
+        render(this.entities, terrains, camera, lights);
+
+        this.entities.clear();
+        this.terrains.clear();
+        this.guis.clear();
+        this.waterTiles.clear();
+    }
+
     public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TextureGUI> guis,
                             List<WaterTile> waterTiles, Camera camera, List<Light> lights) {
         for (Entity entity : entities)
@@ -121,7 +136,7 @@ public class Renderer {
         for (WaterTile waterTile : waterTiles)
             processWaterTile(waterTile);
 
-        render(camera, lights);
+        render(this.entities, terrains, guis, waterTiles, camera, lights);
 
         this.entities.clear();
         this.terrains.clear();
@@ -129,20 +144,50 @@ public class Renderer {
         this.waterTiles.clear();
     }
 
-    public void render(Camera camera, List<Light> lights) {
+    public void render(Map<TexturedModel, List<Entity>> entities, List<Terrain> terrains, Camera camera,
+                       List<Light> lights) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
         entityShader.start();
         entityShader.loadLights(lights);
         entityShader.loadViewMatrix(viewMatrix);
-        entityRenderer.render(this.entities);
+        entityRenderer.render(entities);
         entityShader.stop();
 
         terrainShader.start();
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
-        terrainRenderer.render(this.terrains);
+        terrainRenderer.render(terrains);
+        terrainShader.stop();
+
+        skyboxShader.start();
+        // Disabling translation
+        viewMatrix.m30 = 0;
+        viewMatrix.m31 = 0;
+        viewMatrix.m32 = 0;
+        skyBoxRotation += SKYBOX_ROTATE_SPEED * DisplayManager.getDelta();
+        Matrix4f.rotate((float) Math.toRadians(skyBoxRotation), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);
+        skyboxShader.loadViewMatrix(viewMatrix);
+        skyboxRenderer.render();
+        skyboxShader.stop();
+    }
+
+    public void render(Map<TexturedModel, List<Entity>> entities, List<Terrain> terrains, List<TextureGUI> guis,
+                       List<WaterTile> waterTiles, Camera camera, List<Light> lights) {
+        prepare();
+        Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
+
+        entityShader.start();
+        entityShader.loadLights(lights);
+        entityShader.loadViewMatrix(viewMatrix);
+        entityRenderer.render(entities);
+        entityShader.stop();
+
+        terrainShader.start();
+        terrainShader.loadLights(lights);
+        terrainShader.loadViewMatrix(viewMatrix);
+        terrainRenderer.render(terrains);
         terrainShader.stop();
 
         waterShader.start();
@@ -162,7 +207,7 @@ public class Renderer {
         skyboxShader.stop();
 
         guiShader.start();
-        guiRenderer.render(this.guis);
+        guiRenderer.render(guis);
         guiShader.stop();
     }
 

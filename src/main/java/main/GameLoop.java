@@ -21,6 +21,7 @@ public class GameLoop {
 
         ModelLoader loader = new ModelLoader();
         Renderer renderer = new Renderer(loader);
+        WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
 
         List<Entity> entities = new ArrayList<>();
         List<Terrain> terrains = new ArrayList<>();
@@ -70,7 +71,10 @@ public class GameLoop {
 
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
+        TextureGUI frameBufferGUI = new TextureGUI(frameBufferObjects.getReflectionTexture(),
+                new Vector2f(-0.7f, -0.7f), new Vector2f(0.2f, 0.2f));
         guis.add(healthGUI);
+        guis.add(frameBufferGUI);
 
         WaterTile waterTile = new WaterTile(75, -75, 0);
         waterTiles.add(waterTile);
@@ -84,10 +88,15 @@ public class GameLoop {
             // mousePicker.update();
             // System.out.println(mousePicker.getCurrentRay());
 
+            frameBufferObjects.bindReflectionFrameBuffer();
+            renderer.renderScene(entities, terrains, camera, lights);
+            frameBufferObjects.unbindCurrentFrameBuffer();
+
             renderer.renderScene(entities, terrains, guis, waterTiles, camera, lights);
             DisplayManager.updateDisplay();
         }
 
+        frameBufferObjects.clean();
         renderer.clean();
         DisplayManager.closeDisplay();
     }
