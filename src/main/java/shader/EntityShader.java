@@ -4,6 +4,7 @@ import model.Light;
 import utils.math.Matrix4f;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
+import utils.math.Vector4f;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class EntityShader extends Shader {
     private int locationTextureOffset;
     private int locationCelEnable;
     private int locationCelLevel;
+    private int locationClippingPlane;
 
     public EntityShader() {
         super(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
@@ -55,6 +57,7 @@ public class EntityShader extends Shader {
         locationTextureOffset = super.getUniformLocation("textureOffset");
         locationCelEnable = super.getUniformLocation("celEnable");
         locationCelLevel = super.getUniformLocation("celLevel");
+        locationClippingPlane = super.getUniformLocation("clippingPlane");
     }
 
     @Override
@@ -115,6 +118,10 @@ public class EntityShader extends Shader {
             super.loadBoolean(locationCelEnable, true);
             super.loadFloat(locationCelLevel, CEL_LEVEL);
         }
+    }
+
+    public void loadClippingPlane(Vector4f clippingPlane) {
+        super.loadVector(locationClippingPlane, clippingPlane);
     }
 
 }

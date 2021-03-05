@@ -3,6 +3,7 @@ package shader;
 import model.Light;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
+import utils.math.Vector4f;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class TerrainShader extends Shader {
     private int locationBlendMap;
     private int locationCelEnable;
     private int locationCelLevel;
+    private int locationClippingPlane;
 
     public TerrainShader() {
         super(TERRAIN_VERTEX_SHADER_FILE, TERRAIN_FRAGMENT_SHADER_FILE);
@@ -58,6 +60,7 @@ public class TerrainShader extends Shader {
         locationBlendMap = super.getUniformLocation("blendMap");
         locationCelEnable = super.getUniformLocation("celEnable");
         locationCelLevel = super.getUniformLocation("celLevel");
+        locationClippingPlane = super.getUniformLocation("clippingPlane");
     }
 
     @Override
@@ -114,6 +117,10 @@ public class TerrainShader extends Shader {
             super.loadBoolean(locationCelEnable, true);
             super.loadFloat(locationCelLevel, CEL_LEVEL);
         }
+    }
+
+    public void loadClippingPlane(Vector4f clippingPlane) {
+        super.loadVector(locationClippingPlane, clippingPlane);
     }
 
 }

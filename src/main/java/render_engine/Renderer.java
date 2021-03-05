@@ -6,6 +6,7 @@ import shader.*;
 import utils.math.GameMath;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
+import utils.math.Vector4f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,14 +108,15 @@ public class Renderer {
         waterTiles.add(waterTile);
     }
 
-    public void renderScene(List<Entity> entities, List<Terrain> terrains, Camera camera, List<Light> lights) {
+    public void renderScene(List<Entity> entities, List<Terrain> terrains, Camera camera, List<Light> lights,
+                            Vector4f clippingPlane) {
         for (Entity entity : entities)
             processEntity(entity);
 
         for (Terrain terrain : terrains)
             processTerrain(terrain);
 
-        render(this.entities, terrains, camera, lights);
+        render(this.entities, terrains, camera, lights, clippingPlane);
 
         this.entities.clear();
         this.terrains.clear();
@@ -123,7 +125,7 @@ public class Renderer {
     }
 
     public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                            List<WaterTile> waterTiles, Camera camera, List<Light> lights) {
+                            List<WaterTile> waterTiles, Camera camera, List<Light> lights, Vector4f clippingPlane) {
         for (Entity entity : entities)
             processEntity(entity);
 
@@ -136,7 +138,7 @@ public class Renderer {
         for (WaterTile waterTile : waterTiles)
             processWaterTile(waterTile);
 
-        render(this.entities, terrains, guis, waterTiles, camera, lights);
+        render(this.entities, terrains, guis, waterTiles, camera, lights, clippingPlane);
 
         this.entities.clear();
         this.terrains.clear();
@@ -145,17 +147,19 @@ public class Renderer {
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities, List<Terrain> terrains, Camera camera,
-                       List<Light> lights) {
+                       List<Light> lights, Vector4f clippingPlane) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
         entityShader.start();
+        entityShader.loadClippingPlane(clippingPlane);
         entityShader.loadLights(lights);
         entityShader.loadViewMatrix(viewMatrix);
         entityRenderer.render(entities);
         entityShader.stop();
 
         terrainShader.start();
+        terrainShader.loadClippingPlane(clippingPlane);
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
         terrainRenderer.render(terrains);
@@ -174,17 +178,19 @@ public class Renderer {
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                       List<WaterTile> waterTiles, Camera camera, List<Light> lights) {
+                       List<WaterTile> waterTiles, Camera camera, List<Light> lights, Vector4f clippingPlane) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
         entityShader.start();
+        entityShader.loadClippingPlane(clippingPlane);
         entityShader.loadLights(lights);
         entityShader.loadViewMatrix(viewMatrix);
         entityRenderer.render(entities);
         entityShader.stop();
 
         terrainShader.start();
+        terrainShader.loadClippingPlane(clippingPlane);
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
         terrainRenderer.render(terrains);

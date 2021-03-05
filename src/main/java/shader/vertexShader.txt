@@ -19,9 +19,11 @@ uniform float density;
 uniform float gradient;
 uniform float textureRows;
 uniform vec2 textureOffset;
+uniform vec4 clippingPlane;
 
 void main() {
     vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
+    gl_ClipDistance[0] = dot(worldPosition, clippingPlane);
     vec4 positionRelativeToCamera = viewMatrix * worldPosition;
     gl_Position = projectionMatrix * positionRelativeToCamera;
     passTextureCoord = textureCoord / textureRows + textureOffset;

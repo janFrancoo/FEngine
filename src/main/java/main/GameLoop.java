@@ -1,10 +1,13 @@
 package main;
 
 import model.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import render_engine.*;
 import utils.OBJLoader;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
+import utils.math.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,10 +74,13 @@ public class GameLoop {
 
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
-        TextureGUI frameBufferGUI = new TextureGUI(frameBufferObjects.getReflectionTexture(),
+        TextureGUI reflectionGUI = new TextureGUI(frameBufferObjects.getReflectionTexture(),
                 new Vector2f(-0.7f, -0.7f), new Vector2f(0.2f, 0.2f));
+        TextureGUI refractionGUI = new TextureGUI(frameBufferObjects.getRefractionTexture(),
+                new Vector2f(0.7f, -0.7f), new Vector2f(0.2f, 0.2f));
         guis.add(healthGUI);
-        guis.add(frameBufferGUI);
+        guis.add(reflectionGUI);
+        guis.add(refractionGUI);
 
         WaterTile waterTile = new WaterTile(75, -75, 0);
         waterTiles.add(waterTile);
@@ -88,11 +94,23 @@ public class GameLoop {
             // mousePicker.update();
             // System.out.println(mousePicker.getCurrentRay());
 
-            frameBufferObjects.bindReflectionFrameBuffer();
-            renderer.renderScene(entities, terrains, camera, lights);
-            frameBufferObjects.unbindCurrentFrameBuffer();
+            GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
-            renderer.renderScene(entities, terrains, guis, waterTiles, camera, lights);
+            frameBufferObjects.bindReflectionFrameBuffer();
+            float camDistance = 2 * (camera.getPosition().y - waterTile.getHeight());
+            camera.getPosition().y -= camDistance;
+            camera.invertPitch();
+            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, 1, 0, -waterTile.getHeight()));
+            camera.getPosition().y += camDistance;
+            camera.invertPitch();
+
+            frameBufferObjects.bindRefractionFrameBuffer();
+            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, -1, 0, waterTile.getHeight()));
+
+            GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+
+            frameBufferObjects.unbindCurrentFrameBuffer();
+            renderer.renderScene(entities, terrains, guis, waterTiles, camera, lights, new Vector4f(0, -1, 0, 100000));
             DisplayManager.updateDisplay();
         }
 
