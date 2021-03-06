@@ -39,7 +39,7 @@ public class Renderer {
 
     private float skyBoxRotation = 0;
 
-    public Renderer(ModelLoader loader) {
+    public Renderer(ModelLoader loader, WaterFrameBuffers waterFrameBuffers) {
         this.loader = loader;
 
         entityShader = new EntityShader();
@@ -52,7 +52,7 @@ public class Renderer {
         terrainRenderer = new TerrainRenderer(terrainShader);
         guiRenderer = new GUIRenderer(guiShader, loader);
         skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
-        waterRenderer = new WaterRenderer(waterShader, loader);
+        waterRenderer = new WaterRenderer(waterShader, waterFrameBuffers, loader);
 
         enableCulling();
 
@@ -125,7 +125,8 @@ public class Renderer {
     }
 
     public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                            List<WaterTile> waterTiles, Camera camera, List<Light> lights, Vector4f clippingPlane) {
+                            List<WaterTile> waterTiles, WaterFrameBuffers waterFrameBuffers, Camera camera,
+                            List<Light> lights, Vector4f clippingPlane) {
         for (Entity entity : entities)
             processEntity(entity);
 
@@ -178,7 +179,8 @@ public class Renderer {
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                       List<WaterTile> waterTiles, Camera camera, List<Light> lights, Vector4f clippingPlane) {
+                       List<WaterTile> waterTiles, Camera camera,
+                       List<Light> lights, Vector4f clippingPlane) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
@@ -198,6 +200,7 @@ public class Renderer {
 
         waterShader.start();
         waterShader.loadViewMatrix(viewMatrix);
+        waterShader.connectTextures();
         waterRenderer.render(waterTiles);
         waterShader.stop();
 

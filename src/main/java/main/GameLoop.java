@@ -23,8 +23,8 @@ public class GameLoop {
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
-        Renderer renderer = new Renderer(loader);
         WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
+        Renderer renderer = new Renderer(loader, frameBufferObjects);
 
         List<Entity> entities = new ArrayList<>();
         List<Terrain> terrains = new ArrayList<>();
@@ -74,13 +74,7 @@ public class GameLoop {
 
         TextureGUI healthGUI = new TextureGUI(loader.loadTexture("health"), new Vector2f(-0.75f, 0.9f),
                 new Vector2f(0.2f, 0.2f));
-        TextureGUI reflectionGUI = new TextureGUI(frameBufferObjects.getReflectionTexture(),
-                new Vector2f(-0.7f, -0.7f), new Vector2f(0.2f, 0.2f));
-        TextureGUI refractionGUI = new TextureGUI(frameBufferObjects.getRefractionTexture(),
-                new Vector2f(0.7f, -0.7f), new Vector2f(0.2f, 0.2f));
         guis.add(healthGUI);
-        guis.add(reflectionGUI);
-        guis.add(refractionGUI);
 
         WaterTile waterTile = new WaterTile(75, -75, 0);
         waterTiles.add(waterTile);
@@ -110,7 +104,8 @@ public class GameLoop {
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 
             frameBufferObjects.unbindCurrentFrameBuffer();
-            renderer.renderScene(entities, terrains, guis, waterTiles, camera, lights, new Vector4f(0, -1, 0, 100000));
+            renderer.renderScene(entities, terrains, guis, waterTiles, frameBufferObjects, camera, lights,
+                    new Vector4f(0, -1, 0, 100000));
             DisplayManager.updateDisplay();
         }
 
