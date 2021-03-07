@@ -13,23 +13,30 @@ import utils.math.Vector3f;
 
 import java.util.List;
 
-import static utils.Constants.TILE_SIZE;
+import static utils.Constants.*;
 
 public class WaterRenderer {
 
     private final RawModel quad;
     private final WaterShader shader;
     private final WaterFrameBuffers frameBuffers;
+    private final int dudvTexture;
+    private float moveFactor = 0;
 
     public WaterRenderer(WaterShader shader, WaterFrameBuffers frameBuffers, ModelLoader loader) {
         this.shader = shader;
         this.frameBuffers = frameBuffers;
+        this.dudvTexture = loader.loadTexture(DUDV_MAP);
 
         float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
         quad = loader.loadToVao(vertices, 2);
     }
 
     public void render(List<WaterTile> waterTiles) {
+        moveFactor += WAVE_SPEED * DisplayManager.getDelta();
+        moveFactor %= 1;
+        shader.loadMoveFactor(moveFactor);
+
         GL30.glBindVertexArray(quad.getVaoId());
         GL20.glEnableVertexAttribArray(0);
 
@@ -37,6 +44,8 @@ public class WaterRenderer {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, frameBuffers.getReflectionTexture());
         GL13.glActiveTexture(GL13.GL_TEXTURE1);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, frameBuffers.getRefractionTexture());
+        GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, dudvTexture);
 
         for (WaterTile waterTile: waterTiles) {
             Matrix4f transformationMatrix = GameMath.createTransformationMatrix(new Vector3f(waterTile.getX(),
