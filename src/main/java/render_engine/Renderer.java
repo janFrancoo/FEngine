@@ -199,7 +199,7 @@ public class Renderer {
         terrainShader.stop();
 
         waterShader.start();
-        waterShader.loadViewMatrix(viewMatrix);
+        waterShader.loadViewMatrix(camera, viewMatrix);
         waterShader.connectTextures();
         waterRenderer.render(waterTiles);
         waterShader.stop();

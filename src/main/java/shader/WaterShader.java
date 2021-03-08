@@ -1,5 +1,6 @@
 package shader;
 
+import model.Camera;
 import utils.math.Matrix4f;
 
 import static utils.Constants.WATER_FRAGMENT_SHADER_FILE;
@@ -14,6 +15,7 @@ public class WaterShader extends Shader {
     private int locationRefractionTexture;
     private int locationDuDvMap;
     private int locationMoveFactor;
+    private int locationCameraPosition;
 
     public WaterShader() {
         super(WATER_VERTEX_SHADER_FILE, WATER_FRAGMENT_SHADER_FILE);
@@ -28,6 +30,7 @@ public class WaterShader extends Shader {
         locationRefractionTexture = super.getUniformLocation("refractionTexture");
         locationDuDvMap = super.getUniformLocation("dudvMap");
         locationMoveFactor = super.getUniformLocation("moveFactor");
+        locationCameraPosition = super.getUniformLocation("cameraPosition");
     }
 
     @Override
@@ -39,7 +42,8 @@ public class WaterShader extends Shader {
         super.loadMatrix(locationTransformationMatrix, matrix);
     }
 
-    public void loadViewMatrix(Matrix4f matrix) {
+    public void loadViewMatrix(Camera camera, Matrix4f matrix) {
+        super.loadVector(locationCameraPosition, camera.getPosition());
         super.loadMatrix(locationViewMatrix, matrix);
     }
 
