@@ -45,6 +45,7 @@ public class Constants {
     public static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
     public static final float TILE_SIZE = 60;
     public static final String DUDV_MAP = "waterDUDV";
+    public static final String NORMAL_MAP = "normalMap";
     public static final float WAVE_SPEED = 0.03f;
     // Light
     public static final int MAX_LIGHT = 4;

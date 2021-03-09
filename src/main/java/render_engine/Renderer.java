@@ -201,6 +201,7 @@ public class Renderer {
         waterShader.start();
         waterShader.loadViewMatrix(camera, viewMatrix);
         waterShader.connectTextures();
+        waterShader.loadLight(lights.get(0));
         waterRenderer.render(waterTiles);
         waterShader.stop();
 

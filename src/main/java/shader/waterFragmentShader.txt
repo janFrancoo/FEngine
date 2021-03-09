@@ -3,15 +3,20 @@
 in vec4 clipSpaceCoord;
 in vec2 textureCoord;
 in vec3 toCameraVector;
+in vec3 fromLightVector;
 
 out vec4 outColor;
 
 uniform sampler2D reflectionTexture;
 uniform sampler2D refractionTexture;
 uniform sampler2D dudvMap;
+uniform sampler2D normalMap;
 uniform float moveFactor;
+uniform vec3 lightColor;
 
 const float waveStrength = 0.02;
+const float shineDamper = 20.0;
+const float reflectivity = 0.6;
 
 void main() {
     vec2 ndc = (clipSpaceCoord.xy / clipSpaceCoord.w) / 2.0 + 0.5;
@@ -19,9 +24,9 @@ void main() {
     vec2 reflectionTextureCoord = vec2(ndc.x, -ndc.y);
     vec2 refractionTextureCoord = vec2(ndc.x, ndc.y);
 
-    vec2 distortion1 = (texture(dudvMap, vec2(textureCoord.x + moveFactor, textureCoord.y)).rg * 2.0 - 1.0) * waveStrength;
-    vec2 distortion2 = (texture(dudvMap, vec2(-textureCoord.x + moveFactor, textureCoord.y + moveFactor)).rg * 2.0 - 1.0) * waveStrength;
-    vec2 totalDistortion = distortion1 + distortion2;
+    vec2 distortedTexCoord = texture(dudvMap, vec2(textureCoord.x + moveFactor, textureCoord.y)).rg * 0.1;
+	distortedTexCoord = textureCoord + vec2(distortedTexCoord.x, distortedTexCoord.y + moveFactor);
+	vec2 totalDistortion = (texture(dudvMap, distortedTexCoord).rg * 2.0 - 1.0) * waveStrength;
 
     reflectionTextureCoord += totalDistortion;
     reflectionTextureCoord.x = clamp(reflectionTextureCoord.x, 0.001, 0.999);
@@ -35,6 +40,15 @@ void main() {
     vec3 viewVector = normalize(toCameraVector);
     float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
 
+    vec4 normalMapColor = texture(normalMap, distortedTexCoord);
+    vec3 normal = vec3(normalMapColor.r * 2.0 - 1, normalMapColor.b, normalMapColor.g * 2.0 - 1);
+    normal = normalize(normal);
+
+    vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
+    float specular = max(dot(reflectedLight, viewVector), 0.0);
+    specular = pow(specular, shineDamper);
+    vec3 specularHighlights = lightColor * specular * reflectivity;
+
 	outColor = mix(reflectionColor, refractionColor, refractiveFactor);
-	outColor = mix(outColor, vec4(0.0, 0.3, 0.5, 1.0), 0.2);
+	outColor = mix(outColor, vec4(0.0, 0.3, 0.5, 1.0), 0.2) + vec4(specularHighlights, 0);
 }

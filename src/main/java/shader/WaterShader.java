@@ -1,6 +1,7 @@
 package shader;
 
 import model.Camera;
+import model.Light;
 import utils.math.Matrix4f;
 
 import static utils.Constants.WATER_FRAGMENT_SHADER_FILE;
@@ -14,8 +15,11 @@ public class WaterShader extends Shader {
     private int locationReflectionTexture;
     private int locationRefractionTexture;
     private int locationDuDvMap;
+    private int locationNormalMap;
     private int locationMoveFactor;
     private int locationCameraPosition;
+    private int locationLightPosition;
+    private int locationLightColor;
 
     public WaterShader() {
         super(WATER_VERTEX_SHADER_FILE, WATER_FRAGMENT_SHADER_FILE);
@@ -29,8 +33,11 @@ public class WaterShader extends Shader {
         locationReflectionTexture = super.getUniformLocation("reflectionTexture");
         locationRefractionTexture = super.getUniformLocation("refractionTexture");
         locationDuDvMap = super.getUniformLocation("dudvMap");
+        locationNormalMap = super.getUniformLocation("normalMap");
         locationMoveFactor = super.getUniformLocation("moveFactor");
         locationCameraPosition = super.getUniformLocation("cameraPosition");
+        locationLightPosition = super.getUniformLocation("lightPosition");
+        locationLightColor = super.getUniformLocation("lightColor");
     }
 
     @Override
@@ -55,10 +62,16 @@ public class WaterShader extends Shader {
         super.loadInt(locationReflectionTexture, 0);
         super.loadInt(locationRefractionTexture, 1);
         super.loadInt(locationDuDvMap, 2);
+        super.loadInt(locationNormalMap, 3);
     }
 
     public void loadMoveFactor(float factor) {
         super.loadFloat(locationMoveFactor, factor);
+    }
+
+    public void loadLight(Light light) {
+        super.loadVector(locationLightPosition, light.getPosition());
+        super.loadVector(locationLightColor, light.getColor());
     }
 
 }
