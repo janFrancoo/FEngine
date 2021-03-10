@@ -16,6 +16,7 @@ public class WaterShader extends Shader {
     private int locationRefractionTexture;
     private int locationDuDvMap;
     private int locationNormalMap;
+    private int locationDepthMap;
     private int locationMoveFactor;
     private int locationCameraPosition;
     private int locationLightPosition;
@@ -34,6 +35,7 @@ public class WaterShader extends Shader {
         locationRefractionTexture = super.getUniformLocation("refractionTexture");
         locationDuDvMap = super.getUniformLocation("dudvMap");
         locationNormalMap = super.getUniformLocation("normalMap");
+        locationDepthMap = super.getUniformLocation("depthMap");
         locationMoveFactor = super.getUniformLocation("moveFactor");
         locationCameraPosition = super.getUniformLocation("cameraPosition");
         locationLightPosition = super.getUniformLocation("lightPosition");
@@ -63,6 +65,7 @@ public class WaterShader extends Shader {
         super.loadInt(locationRefractionTexture, 1);
         super.loadInt(locationDuDvMap, 2);
         super.loadInt(locationNormalMap, 3);
+        super.loadInt(locationDepthMap, 4);
     }
 
     public void loadMoveFactor(float factor) {

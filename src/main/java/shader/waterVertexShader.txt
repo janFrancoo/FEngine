@@ -13,7 +13,7 @@ uniform mat4 projectionMatrix;
 uniform vec3 cameraPosition;
 uniform vec3 lightPosition;
 
-const float tile = 6.0;
+const float tile = 4.0;
 
 void main() {
     vec4 worldPosition = transformationMatrix * vec4(position.x, 0.0, position.y, 1.0);

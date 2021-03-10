@@ -94,12 +94,12 @@ public class GameLoop {
             float camDistance = 2 * (camera.getPosition().y - waterTile.getHeight());
             camera.getPosition().y -= camDistance;
             camera.invertPitch();
-            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, 1, 0, -waterTile.getHeight()));
+            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, 1, 0, -waterTile.getHeight() + 1.0f));
             camera.getPosition().y += camDistance;
             camera.invertPitch();
 
             frameBufferObjects.bindRefractionFrameBuffer();
-            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, -1, 0, waterTile.getHeight()));
+            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, -1, 0, waterTile.getHeight() + 1.0f));
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 
