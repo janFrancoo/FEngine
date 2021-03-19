@@ -1,7 +1,8 @@
-package utils;
+package utils.loader;
 
 import model.RawModel;
 import render_engine.ModelLoader;
+import utils.Constants;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 

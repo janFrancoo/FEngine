@@ -4,7 +4,8 @@ import model.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import render_engine.*;
-import utils.OBJLoader;
+import utils.loader.NormalMappedOBJLoader;
+import utils.loader.OBJLoader;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 import utils.math.Vector4f;
@@ -27,6 +28,7 @@ public class GameLoop {
         Renderer renderer = new Renderer(loader, frameBufferObjects);
 
         List<Entity> entities = new ArrayList<>();
+        List<Entity> nmEntities = new ArrayList<>();
         List<Terrain> terrains = new ArrayList<>();
         List<TextureGUI> guis = new ArrayList<>();
         List<WaterTile> waterTiles = new ArrayList<>();
@@ -61,6 +63,15 @@ public class GameLoop {
                     new Vector3f(x, terrain.getHeight(x, z), z), 0, 0, 0, 1));
         }
 
+        RawModel rawBarrel = NormalMappedOBJLoader.loadOBJ("barrel", loader);
+        Texture textureBarrel = new Texture(loader.loadTexture("barrel"));
+        textureBarrel.setShineDamper(10);
+        textureBarrel.setReflectivity(0.5f);
+        textureBarrel.setNormalMapID(loader.loadTexture("barrelNormal"));
+        TexturedModel texturedBarrel = new TexturedModel(rawBarrel, textureBarrel);
+        Entity barrel = new Entity(texturedBarrel, new Vector3f(75, 10, -75), 0, 0, 0, 1f);
+        nmEntities.add(barrel);
+
         Camera camera = new Camera(dragon);
         camera.setPitch(3);
         List<Light> lights = new ArrayList<>();
@@ -94,17 +105,19 @@ public class GameLoop {
             float camDistance = 2 * (camera.getPosition().y - waterTile.getHeight());
             camera.getPosition().y -= camDistance;
             camera.invertPitch();
-            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, 1, 0, -waterTile.getHeight() + 1.0f));
+            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, 1, 0,
+                    -waterTile.getHeight() + 1.0f));
             camera.getPosition().y += camDistance;
             camera.invertPitch();
 
             frameBufferObjects.bindRefractionFrameBuffer();
-            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, -1, 0, waterTile.getHeight() + 1.0f));
+            renderer.renderScene(entities, terrains, camera, lights, new Vector4f(0, -1, 0,
+                    waterTile.getHeight() + 1.0f));
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 
             frameBufferObjects.unbindCurrentFrameBuffer();
-            renderer.renderScene(entities, terrains, guis, waterTiles, frameBufferObjects, camera, lights,
+            renderer.renderScene(entities, nmEntities, terrains, guis, waterTiles, camera, lights,
                     new Vector4f(0, -1, 0, 100000));
             DisplayManager.updateDisplay();
         }

@@ -20,10 +20,12 @@ public class Renderer {
     private final ModelLoader loader;
 
     private final EntityRenderer entityRenderer;
+    private final NMRenderer nmRenderer;
     private final TerrainRenderer terrainRenderer;
     private final GUIRenderer guiRenderer;
     private final SkyboxRenderer skyboxRenderer;
     private final EntityShader entityShader;
+    private final NMShader nmShader;
     private final TerrainShader terrainShader;
     private final GUIShader guiShader;
     private final SkyboxShader skyboxShader;
@@ -31,6 +33,7 @@ public class Renderer {
     private final WaterRenderer waterRenderer;
 
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
+    private final Map<TexturedModel, List<Entity>> nmEntities = new HashMap<>();
     private final List<Terrain> terrains = new ArrayList<>();
     private final List<TextureGUI> guis = new ArrayList<>();
     private final List<WaterTile> waterTiles = new ArrayList<>();
@@ -43,12 +46,14 @@ public class Renderer {
         this.loader = loader;
 
         entityShader = new EntityShader();
+        nmShader = new NMShader();
         terrainShader = new TerrainShader();
         guiShader = new GUIShader();
         skyboxShader = new SkyboxShader();
         waterShader = new WaterShader();
 
         entityRenderer = new EntityRenderer(entityShader);
+        nmRenderer = new NMRenderer(nmShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
         guiRenderer = new GUIRenderer(guiShader, loader);
         skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
@@ -61,6 +66,10 @@ public class Renderer {
         entityShader.start();
         entityShader.loadProjectionMatrix(projectionMatrix);
         entityShader.stop();
+
+        nmShader.start();
+        nmShader.loadProjectionMatrix(projectionMatrix);
+        nmShader.stop();
 
         terrainShader.start();
         terrainShader.loadProjectionMatrix(projectionMatrix);
@@ -96,6 +105,18 @@ public class Renderer {
         }
     }
 
+    public void processNMEntity(Entity entity) {
+        TexturedModel texturedModel = entity.getTexturedModel();
+        List<Entity> batch = nmEntities.get(texturedModel);
+        if (batch != null)
+            batch.add(entity);
+        else {
+            List<Entity> newBatch = new ArrayList<>();
+            newBatch.add(entity);
+            nmEntities.put(texturedModel, newBatch);
+        }
+    }
+
     public void processTerrain(Terrain terrain) {
         terrains.add(terrain);
     }
@@ -124,11 +145,14 @@ public class Renderer {
         this.waterTiles.clear();
     }
 
-    public void renderScene(List<Entity> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                            List<WaterTile> waterTiles, WaterFrameBuffers waterFrameBuffers, Camera camera,
-                            List<Light> lights, Vector4f clippingPlane) {
+    public void renderScene(List<Entity> entities, List<Entity> nmEntities, List<Terrain> terrains,
+                            List<TextureGUI> guis, List<WaterTile> waterTiles, Camera camera, List<Light> lights,
+                            Vector4f clippingPlane) {
         for (Entity entity : entities)
             processEntity(entity);
+
+        for (Entity nmEntity: nmEntities)
+            processNMEntity(nmEntity);
 
         for (Terrain terrain : terrains)
             processTerrain(terrain);
@@ -139,9 +163,10 @@ public class Renderer {
         for (WaterTile waterTile : waterTiles)
             processWaterTile(waterTile);
 
-        render(this.entities, terrains, guis, waterTiles, camera, lights, clippingPlane);
+        render(this.entities, this.nmEntities, terrains, guis, waterTiles, camera, lights, clippingPlane);
 
         this.entities.clear();
+        this.nmEntities.clear();
         this.terrains.clear();
         this.guis.clear();
         this.waterTiles.clear();
@@ -178,8 +203,8 @@ public class Renderer {
         skyboxShader.stop();
     }
 
-    public void render(Map<TexturedModel, List<Entity>> entities, List<Terrain> terrains, List<TextureGUI> guis,
-                       List<WaterTile> waterTiles, Camera camera,
+    public void render(Map<TexturedModel, List<Entity>> entities, Map<TexturedModel, List<Entity>> nmEntities,
+                       List<Terrain> terrains, List<TextureGUI> guis, List<WaterTile> waterTiles, Camera camera,
                        List<Light> lights, Vector4f clippingPlane) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
@@ -190,6 +215,13 @@ public class Renderer {
         entityShader.loadViewMatrix(viewMatrix);
         entityRenderer.render(entities);
         entityShader.stop();
+
+        nmShader.start();
+        nmShader.loadClippingPlane(clippingPlane);
+        nmShader.loadLights(lights, viewMatrix);
+        nmShader.loadViewMatrix(viewMatrix);
+        nmRenderer.render(nmEntities);
+        nmShader.stop();
 
         terrainShader.start();
         terrainShader.loadClippingPlane(clippingPlane);
@@ -230,6 +262,7 @@ public class Renderer {
     public void clean() {
         loader.clean();
         entityShader.clean();
+        nmShader.clean();
         terrainShader.clean();
         guiShader.clean();
         skyboxShader.clean();

@@ -24,6 +24,10 @@ public class Constants {
             "\\java\\shader\\waterVertexShader.txt";
     public static final String WATER_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
             "\\java\\shader\\waterFragmentShader.txt";
+    public static final String NM_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\nmVertexShader.txt";
+    public static final String NM_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\nmFragmentShader.txt";
     public static final String RES_FOLDER = "res";
 
     // Game Settings
@@ -39,6 +43,7 @@ public class Constants {
     public static final int REFLECTION_HEIGHT = 180;
     public static final int REFRACTION_WIDTH = 1280;
     public static final int REFRACTION_HEIGHT = 720;
+    public static final float LOD_BIAS = -2.0f;
     // Terrain
     public static final float TERRAIN_SIZE = 800;
     public static final float TERRAIN_MAX_HEIGHT = 80;

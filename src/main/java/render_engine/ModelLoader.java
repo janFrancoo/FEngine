@@ -11,6 +11,8 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utils.Constants.LOD_BIAS;
+
 public class ModelLoader {
 
     private final List<Integer> vaoList = new ArrayList<>();
@@ -28,7 +30,7 @@ public class ModelLoader {
                 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bufferHelper.storeDataInIntBuffer(textureData.getBuffer()));
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4f);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, LOD_BIAS);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         return result;
     }
@@ -59,6 +61,20 @@ public class ModelLoader {
         storeDataInAttrList(0, 3, positions);
         storeDataInAttrList(1, 2, textureCoords);
         storeDataInAttrList(2, 3, normals);
+        GL30.glBindVertexArray(0);
+        return new RawModel(vaoId, indices.length);
+    }
+
+    public RawModel loadToVao(float[] positions, int[] indices, float[] textureCoords, float[] normals,
+                              float[] tangents) {
+        int vaoId = GL30.glGenVertexArrays();
+        vaoList.add(vaoId);
+        GL30.glBindVertexArray(vaoId);
+        bindIndicesBuffer(indices);
+        storeDataInAttrList(0, 3, positions);
+        storeDataInAttrList(1, 2, textureCoords);
+        storeDataInAttrList(2, 3, normals);
+        storeDataInAttrList(3, 3, tangents);
         GL30.glBindVertexArray(0);
         return new RawModel(vaoId, indices.length);
     }

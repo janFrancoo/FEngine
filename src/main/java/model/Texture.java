@@ -3,6 +3,7 @@ package model;
 public class Texture {
 
     private final int textureID;
+    private int normalMapID;
     private float shineDamper = 1;
     private float reflectivity = 0;
     private boolean transparent = false;
@@ -15,6 +16,14 @@ public class Texture {
 
     public int getTextureID() {
         return textureID;
+    }
+
+    public int getNormalMapID() {
+        return normalMapID;
+    }
+
+    public void setNormalMapID(int normalMapID) {
+        this.normalMapID = normalMapID;
     }
 
     public float getShineDamper() {

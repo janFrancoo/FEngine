@@ -14,11 +14,27 @@ public class Vector3f {
         this.z = z;
     }
 
+    public void add(Vector3f vector) {
+        x += vector.x;
+        y += vector.y;
+        z += vector.z;
+    }
+
+    public static Vector3f sub(Vector3f left, Vector3f right) {
+        return new Vector3f(left.x - right.x, left.y - right.y, left.z - right.z);
+    }
+
     public void normalise() {
         float vectorLength = length();
         x /= vectorLength;
         y /= vectorLength;
         z /= vectorLength;
+    }
+
+    public void scale(float val) {
+        x *= val;
+        y *= val;
+        z *= val;
     }
 
     public float length() {
