@@ -3,6 +3,7 @@ package render_engine;
 import model.*;
 import org.lwjgl.opengl.GL11;
 import shader.*;
+import utils.font.FontType;
 import utils.math.GameMath;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
@@ -23,11 +24,14 @@ public class Renderer {
     private final NMRenderer nmRenderer;
     private final TerrainRenderer terrainRenderer;
     private final GUIRenderer guiRenderer;
+    private final FontRenderer fontRenderer;
     private final SkyboxRenderer skyboxRenderer;
+
     private final EntityShader entityShader;
     private final NMShader nmShader;
     private final TerrainShader terrainShader;
     private final GUIShader guiShader;
+    private final FontShader fontShader;
     private final SkyboxShader skyboxShader;
     private final WaterShader waterShader;
     private final WaterRenderer waterRenderer;
@@ -36,6 +40,7 @@ public class Renderer {
     private final Map<TexturedModel, List<Entity>> nmEntities = new HashMap<>();
     private final List<Terrain> terrains = new ArrayList<>();
     private final List<TextureGUI> guis = new ArrayList<>();
+    private final Map<FontType, List<TextGUI>> texts = new HashMap<>();
     private final List<WaterTile> waterTiles = new ArrayList<>();
 
     private final Matrix4f projectionMatrix;
@@ -49,6 +54,7 @@ public class Renderer {
         nmShader = new NMShader();
         terrainShader = new TerrainShader();
         guiShader = new GUIShader();
+        fontShader = new FontShader();
         skyboxShader = new SkyboxShader();
         waterShader = new WaterShader();
 
@@ -56,6 +62,7 @@ public class Renderer {
         nmRenderer = new NMRenderer(nmShader);
         terrainRenderer = new TerrainRenderer(terrainShader);
         guiRenderer = new GUIRenderer(guiShader, loader);
+        fontRenderer = new FontRenderer(fontShader);
         skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
         waterRenderer = new WaterRenderer(waterShader, waterFrameBuffers, loader);
 
@@ -125,6 +132,12 @@ public class Renderer {
         guis.add(gui);
     }
 
+    public void processText(TextGUI text) {
+        FontType font = text.getFont();
+        List<TextGUI> textBatch = texts.computeIfAbsent(font, k -> new ArrayList<>());
+        textBatch.add(text);
+    }
+
     public void processWaterTile(WaterTile waterTile) {
         waterTiles.add(waterTile);
     }
@@ -146,12 +159,12 @@ public class Renderer {
     }
 
     public void renderScene(List<Entity> entities, List<Entity> nmEntities, List<Terrain> terrains,
-                            List<TextureGUI> guis, List<WaterTile> waterTiles, Camera camera, List<Light> lights,
-                            Vector4f clippingPlane) {
+                            List<TextureGUI> guis, List<TextGUI> texts, List<WaterTile> waterTiles, Camera camera,
+                            List<Light> lights, Vector4f clippingPlane) {
         for (Entity entity : entities)
             processEntity(entity);
 
-        for (Entity nmEntity: nmEntities)
+        for (Entity nmEntity : nmEntities)
             processNMEntity(nmEntity);
 
         for (Terrain terrain : terrains)
@@ -160,15 +173,20 @@ public class Renderer {
         for (TextureGUI gui : guis)
             processGUI(gui);
 
+        for (TextGUI text : texts)
+            processText(text);
+
         for (WaterTile waterTile : waterTiles)
             processWaterTile(waterTile);
 
-        render(this.entities, this.nmEntities, terrains, guis, waterTiles, camera, lights, clippingPlane);
+        render(this.entities, this.nmEntities, this.terrains, this.guis, this.texts, this.waterTiles,
+                camera, lights, clippingPlane);
 
         this.entities.clear();
         this.nmEntities.clear();
         this.terrains.clear();
         this.guis.clear();
+        this.texts.clear();
         this.waterTiles.clear();
     }
 
@@ -204,8 +222,8 @@ public class Renderer {
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities, Map<TexturedModel, List<Entity>> nmEntities,
-                       List<Terrain> terrains, List<TextureGUI> guis, List<WaterTile> waterTiles, Camera camera,
-                       List<Light> lights, Vector4f clippingPlane) {
+                       List<Terrain> terrains, List<TextureGUI> guis, Map<FontType, List<TextGUI>> texts,
+                       List<WaterTile> waterTiles, Camera camera, List<Light> lights, Vector4f clippingPlane) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
@@ -251,6 +269,10 @@ public class Renderer {
         guiShader.start();
         guiRenderer.render(guis);
         guiShader.stop();
+
+        fontShader.start();
+        fontRenderer.render(texts);
+        fontShader.stop();
     }
 
     private void prepare() {
@@ -265,6 +287,7 @@ public class Renderer {
         nmShader.clean();
         terrainShader.clean();
         guiShader.clean();
+        fontShader.clean();
         skyboxShader.clean();
         waterShader.clean();
     }

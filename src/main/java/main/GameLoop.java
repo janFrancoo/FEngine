@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import render_engine.*;
 import utils.font.FontType;
-import utils.font.Text;
 import utils.loader.NormalMappedOBJLoader;
 import utils.loader.OBJLoader;
 import utils.math.Vector2f;
@@ -27,7 +26,6 @@ public class GameLoop {
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
-        Text.init(loader);
         WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
         Renderer renderer = new Renderer(loader, frameBufferObjects);
 
@@ -35,6 +33,7 @@ public class GameLoop {
         List<Entity> nmEntities = new ArrayList<>();
         List<Terrain> terrains = new ArrayList<>();
         List<TextureGUI> guis = new ArrayList<>();
+        List<TextGUI> texts = new ArrayList<>();
         List<WaterTile> waterTiles = new ArrayList<>();
 
         Texture blendMap = new Texture(loader.loadTexture("blendMap"));
@@ -97,8 +96,9 @@ public class GameLoop {
         FontType font = new FontType(loader.loadTexture("verdana"),
                 new File("res/verdana.fnt"));
         TextGUI text = new TextGUI("TEST", 5, font, new Vector2f(0, 0.5f),
-                1f, true);
+                1f, true, loader);
         text.setColor(1, 0 ,0);
+        texts.add(text);
 
         // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 
@@ -127,15 +127,12 @@ public class GameLoop {
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 
             frameBufferObjects.unbindCurrentFrameBuffer();
-            renderer.renderScene(entities, nmEntities, terrains, guis, waterTiles, camera, lights,
+            renderer.renderScene(entities, nmEntities, terrains, guis, texts, waterTiles, camera, lights,
                     new Vector4f(0, -1, 0, 100000));
-
-            Text.render();
 
             DisplayManager.updateDisplay();
         }
 
-        Text.clean();
         frameBufferObjects.clean();
         renderer.clean();
         DisplayManager.closeDisplay();

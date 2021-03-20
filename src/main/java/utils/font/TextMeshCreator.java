@@ -56,7 +56,6 @@ public class TextMeshCreator {
     }
 
     private TextMeshData createQuadVertices(TextGUI text, List<Line> lines) {
-        text.setNumberOfLines(lines.size());
         double cursorX = 0f;
         double cursorY = 0f;
         List<Float> vertices = new ArrayList<>();

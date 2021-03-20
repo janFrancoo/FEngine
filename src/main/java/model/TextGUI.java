@@ -1,7 +1,8 @@
 package model;
 
+import render_engine.ModelLoader;
 import utils.font.FontType;
-import utils.font.Text;
+import utils.font.TextMeshData;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 
@@ -16,25 +17,25 @@ public class TextGUI {
 
     private final Vector2f position;
     private final float lineMaxSize;
-    private int numberOfLines;
-
+    private final boolean centerText;
     private final FontType font;
 
-    private boolean centerText = false;
-
     public TextGUI(String text, float fontSize, FontType font, Vector2f position, float maxLineLength,
-                   boolean centered) {
+                   boolean centered, ModelLoader loader) {
         this.textString = text;
         this.fontSize = fontSize;
         this.font = font;
         this.position = position;
         this.lineMaxSize = maxLineLength;
         this.centerText = centered;
-        Text.loadText(this);
+
+        loadText(loader);
     }
 
-    public void remove() {
-        Text.removeText(this);
+    private void loadText(ModelLoader loader) {
+        TextMeshData data = font.loadText(this);
+        int vaoID = loader.loadToVao(data.getVertexPositions(), data.getTextureCoords());
+        setMeshInfo(vaoID, data.getVertexCount());
     }
 
     public FontType getFont() {
@@ -49,10 +50,6 @@ public class TextGUI {
 
     public Vector3f getColor() {
         return color;
-    }
-
-    public int getNumberOfLines() {
-        return numberOfLines;
     }
 
     public Vector2f getPosition() {
@@ -74,10 +71,6 @@ public class TextGUI {
 
     public float getFontSize() {
         return fontSize;
-    }
-
-    public void setNumberOfLines(int number) {
-        this.numberOfLines = number;
     }
 
     public boolean isCentered() {

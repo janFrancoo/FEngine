@@ -15,20 +15,18 @@ public class FontRenderer {
 
     private final FontShader shader;
 
-    public FontRenderer() {
-        this.shader = new FontShader();
+    public FontRenderer(FontShader shader) {
+        this.shader = shader;
     }
 
     public void render(Map<FontType, List<TextGUI>> texts) {
         prepare();
-        shader.start();
         for (FontType fontType : texts.keySet()) {
             GL13.glActiveTexture(GL13.GL_TEXTURE0);
             GL13.glBindTexture(GL11.GL_TEXTURE_2D, fontType.getTextureAtlas());
             for (TextGUI textGUI : texts.get(fontType))
                 renderText(textGUI);
         }
-        shader.stop();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
     }
@@ -49,10 +47,6 @@ public class FontRenderer {
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
-    }
-
-    public void clean() {
-        shader.clean();
     }
 
 }
