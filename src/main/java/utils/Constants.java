@@ -28,6 +28,10 @@ public class Constants {
             "\\java\\shader\\nmVertexShader.txt";
     public static final String NM_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
             "\\java\\shader\\nmFragmentShader.txt";
+    public static final String FONT_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\fontVertexShader.txt";
+    public static final String FONT_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
+            "\\java\\shader\\fontFragmentShader.txt";
     public static final String RES_FOLDER = "res";
 
     // Game Settings
@@ -67,4 +71,7 @@ public class Constants {
     public static final float TURN_SPEED = 40;
     public static final float JUMP_POWER = 30;
     public static final float GRAVITY = -50;
+    // Font
+    public static final double LINE_HEIGHT = 0.03f;
+    public static final int SPACE_ASCII = 32;
 }

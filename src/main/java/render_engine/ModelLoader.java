@@ -88,6 +88,16 @@ public class ModelLoader {
         return new RawModel(vaoId, positions.length / dimension);
     }
 
+    public int loadToVao(float[] positions, float[] textureCoords) {
+        int vaoId = GL30.glGenVertexArrays();
+        vaoList.add(vaoId);
+        GL30.glBindVertexArray(vaoId);
+        storeDataInAttrList(0, 2, positions);
+        storeDataInAttrList(1, 2, textureCoords);
+        GL30.glBindVertexArray(0);
+        return vaoId;
+    }
+
     // Every vao has a slot for index buffers, no need to specify attr idx and unbind
     private void bindIndicesBuffer(int[] indices) {
         int vboId = GL15.glGenBuffers();

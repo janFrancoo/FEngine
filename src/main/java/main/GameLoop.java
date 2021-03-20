@@ -4,12 +4,15 @@ import model.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import render_engine.*;
+import utils.font.FontType;
+import utils.font.Text;
 import utils.loader.NormalMappedOBJLoader;
 import utils.loader.OBJLoader;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 import utils.math.Vector4f;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +27,7 @@ public class GameLoop {
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
+        Text.init(loader);
         WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
         Renderer renderer = new Renderer(loader, frameBufferObjects);
 
@@ -90,6 +94,12 @@ public class GameLoop {
         WaterTile waterTile = new WaterTile(75, -75, 0);
         waterTiles.add(waterTile);
 
+        FontType font = new FontType(loader.loadTexture("verdana"),
+                new File("res/verdana.fnt"));
+        TextGUI text = new TextGUI("TEST", 5, font, new Vector2f(0, 0.5f),
+                1f, true);
+        text.setColor(1, 0 ,0);
+
         // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 
         while (!DisplayManager.windowShouldClose()) {
@@ -119,9 +129,13 @@ public class GameLoop {
             frameBufferObjects.unbindCurrentFrameBuffer();
             renderer.renderScene(entities, nmEntities, terrains, guis, waterTiles, camera, lights,
                     new Vector4f(0, -1, 0, 100000));
+
+            Text.render();
+
             DisplayManager.updateDisplay();
         }
 
+        Text.clean();
         frameBufferObjects.clean();
         renderer.clean();
         DisplayManager.closeDisplay();
