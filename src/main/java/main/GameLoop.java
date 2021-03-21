@@ -93,8 +93,8 @@ public class GameLoop {
         WaterTile waterTile = new WaterTile(75, -75, 0);
         waterTiles.add(waterTile);
 
-        FontType font = new FontType(loader.loadTexture("verdana"),
-                new File("res/verdana.fnt"));
+        FontType font = new FontType(loader.loadTexture("comic_sans_ms"),
+                new File("res/comic_sans_ms.fnt"));
         TextGUI text = new TextGUI("TEST", 5, font, new Vector2f(0, 0.5f),
                 1f, true, loader);
         text.setColor(1, 0 ,0);
