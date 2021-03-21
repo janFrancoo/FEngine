@@ -14,12 +14,10 @@ uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPositionEyeSpace[4];
-
+uniform float density;
+uniform float gradient;
 uniform float numberOfRows;
 uniform vec2 offset;
-
-const float density = 0;
-const float gradient = 5.0;
 
 uniform vec4 plane;
 

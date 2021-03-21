@@ -12,7 +12,7 @@ import utils.math.Matrix4f;
 import java.util.List;
 import java.util.Map;
 
-import static utils.Constants.SKY_COLOR;
+import static utils.Constants.*;
 
 public class NMRenderer {
 
@@ -22,6 +22,7 @@ public class NMRenderer {
         this.shader = shader;
         this.shader.start();
         this.shader.connectTextureUnits();
+        this.shader.loadFogValues(FOG_DENSITY, FOG_GRADIENT);
         this.shader.loadSkyColor(SKY_COLOR);
         this.shader.stop();
     }

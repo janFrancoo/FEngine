@@ -20,6 +20,8 @@ public class NMShader extends Shader {
     private int[] locationAttenuation;
     private int locationShineDamper;
     private int locationReflectivity;
+    private int locationFogDensity;
+    private int locationFogGradient;
     private int locationSkyColor;
     private int locationTextureRows;
     private int locationTextureOffset;
@@ -41,11 +43,13 @@ public class NMShader extends Shader {
         locationAttenuation = new int[MAX_LIGHT];
         for (int i=0; i<MAX_LIGHT; i++) {
             locationLightPositionEyeSpace[i] = super.getUniformLocation("lightPositionEyeSpace[" + i + "]");
-            locationLightColor[i] = super.getUniformLocation("lightColour[" + i + "]");
+            locationLightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
             locationAttenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
         }
         locationShineDamper = super.getUniformLocation("shineDamper");
         locationReflectivity = super.getUniformLocation("reflectivity");
+        locationFogDensity = super.getUniformLocation("density");
+        locationFogGradient = super.getUniformLocation("gradient");
         locationSkyColor = super.getUniformLocation("skyColor");
         locationTextureRows = super.getUniformLocation("numberOfRows");
         locationTextureOffset = super.getUniformLocation("offset");
@@ -102,6 +106,11 @@ public class NMShader extends Shader {
 
     public void loadTextureOffset(Vector2f textureOffset) {
         super.loadVector(locationTextureOffset, textureOffset);
+    }
+
+    public void loadFogValues(float fogDensity, float fogGradient) {
+        super.loadFloat(locationFogDensity, fogDensity);
+        super.loadFloat(locationFogGradient, fogGradient);
     }
 
     public void loadClippingPlane(Vector4f clippingPlane) {
