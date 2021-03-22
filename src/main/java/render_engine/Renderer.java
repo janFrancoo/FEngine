@@ -8,6 +8,7 @@ import utils.math.GameMath;
 import utils.math.Matrix4f;
 import utils.math.Vector3f;
 import utils.math.Vector4f;
+import utils.particle.ParticleManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class Renderer {
     private final GUIRenderer guiRenderer;
     private final FontRenderer fontRenderer;
     private final SkyboxRenderer skyboxRenderer;
+    private final ParticleShader particleShader;
 
     private final EntityShader entityShader;
     private final NMShader nmShader;
@@ -35,6 +37,7 @@ public class Renderer {
     private final SkyboxShader skyboxShader;
     private final WaterShader waterShader;
     private final WaterRenderer waterRenderer;
+    private final ParticleRenderer particleRenderer;
 
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private final Map<TexturedModel, List<Entity>> nmEntities = new HashMap<>();
@@ -57,6 +60,7 @@ public class Renderer {
         fontShader = new FontShader();
         skyboxShader = new SkyboxShader();
         waterShader = new WaterShader();
+        particleShader = new ParticleShader();
 
         entityRenderer = new EntityRenderer(entityShader);
         nmRenderer = new NMRenderer(nmShader);
@@ -65,6 +69,7 @@ public class Renderer {
         fontRenderer = new FontRenderer(fontShader);
         skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
         waterRenderer = new WaterRenderer(waterShader, waterFrameBuffers, loader);
+        particleRenderer = new ParticleRenderer(loader, particleShader);
 
         enableCulling();
 
@@ -89,6 +94,10 @@ public class Renderer {
         waterShader.start();
         waterShader.loadProjectionMatrix(projectionMatrix);
         waterShader.stop();
+
+        particleShader.start();
+        particleShader.loadProjectionMatrix(projectionMatrix);
+        particleShader.stop();
     }
 
     public static void enableCulling() {
@@ -257,14 +266,19 @@ public class Renderer {
 
         skyboxShader.start();
         // Disabling translation
-        viewMatrix.m30 = 0;
-        viewMatrix.m31 = 0;
-        viewMatrix.m32 = 0;
+        Matrix4f viewMatrixForSkyboxShader = (Matrix4f) viewMatrix.clone();
+        viewMatrixForSkyboxShader.m30 = 0;
+        viewMatrixForSkyboxShader.m31 = 0;
+        viewMatrixForSkyboxShader.m32 = 0;
         skyBoxRotation += SKYBOX_ROTATE_SPEED * DisplayManager.getDelta();
-        Matrix4f.rotate((float) Math.toRadians(skyBoxRotation), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);
-        skyboxShader.loadViewMatrix(viewMatrix);
+        Matrix4f.rotate((float) Math.toRadians(skyBoxRotation), new Vector3f(0, 1, 0),
+                viewMatrixForSkyboxShader, viewMatrixForSkyboxShader);
+        skyboxShader.loadViewMatrix(viewMatrixForSkyboxShader);
         skyboxRenderer.render();
         skyboxShader.stop();
+
+        ParticleManager.update();
+        particleRenderer.render(ParticleManager.particles, viewMatrix);
 
         guiShader.start();
         guiRenderer.render(guis);
@@ -290,6 +304,8 @@ public class Renderer {
         fontShader.clean();
         skyboxShader.clean();
         waterShader.clean();
+        particleShader.clean();
+        ParticleManager.clean();
     }
 
     public Matrix4f getProjectionMatrix() {

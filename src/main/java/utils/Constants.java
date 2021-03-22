@@ -4,36 +4,24 @@ import utils.math.Vector3f;
 
 public class Constants {
     // Folders & files
-    public static final String VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\vertexShader.txt";
-    public static final String FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\fragmentShader.txt";
-    public static final String TERRAIN_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\terrainVertexShader.txt";
-    public static final String TERRAIN_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\terrainFragmentShader.txt";
-    public static final String GUI_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\guiVertexShader.txt";
-    public static final String GUI_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\guiFragmentShader.txt";
-    public static final String SKYBOX_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\skyboxVertexShader.txt";
-    public static final String SKYBOX_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\skyboxFragmentShader.txt";
-    public static final String WATER_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\waterVertexShader.txt";
-    public static final String WATER_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\waterFragmentShader.txt";
-    public static final String NM_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\nmVertexShader.txt";
-    public static final String NM_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\nmFragmentShader.txt";
-    public static final String FONT_VERTEX_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\fontVertexShader.txt";
-    public static final String FONT_FRAGMENT_SHADER_FILE = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main" +
-            "\\java\\shader\\fontFragmentShader.txt";
     public static final String RES_FOLDER = "res";
-
+    private static final String SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main\\java\\shader\\";
+    public static final String VERTEX_SHADER_FILE = SHADER_FOLDER + "vertexShader.txt";
+    public static final String FRAGMENT_SHADER_FILE = SHADER_FOLDER + "fragmentShader.txt";
+    public static final String TERRAIN_VERTEX_SHADER_FILE = SHADER_FOLDER + "terrainVertexShader.txt";
+    public static final String TERRAIN_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "terrainFragmentShader.txt";
+    public static final String GUI_VERTEX_SHADER_FILE = SHADER_FOLDER + "guiVertexShader.txt";
+    public static final String GUI_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "guiFragmentShader.txt";
+    public static final String SKYBOX_VERTEX_SHADER_FILE = SHADER_FOLDER + "skyboxVertexShader.txt";
+    public static final String SKYBOX_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "skyboxFragmentShader.txt";
+    public static final String WATER_VERTEX_SHADER_FILE = SHADER_FOLDER + "waterVertexShader.txt";
+    public static final String WATER_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "waterFragmentShader.txt";
+    public static final String NM_VERTEX_SHADER_FILE = SHADER_FOLDER + "nmVertexShader.txt";
+    public static final String NM_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "nmFragmentShader.txt";
+    public static final String FONT_VERTEX_SHADER_FILE = SHADER_FOLDER + "fontVertexShader.txt";
+    public static final String FONT_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "fontFragmentShader.txt";
+    public static final String PARTICLE_VERTEX_SHADER_FILE = SHADER_FOLDER + "particleVertexShader.txt";
+    public static final String PARTICLE_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "particleFragmentShader.txt";
     // Game Settings
     // Window
     public static final int WIDTH = 2048;

@@ -1,15 +1,18 @@
 package main;
 
 import model.*;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import render_engine.*;
 import utils.font.FontType;
+import utils.input.KeyInput;
 import utils.loader.NormalMappedOBJLoader;
 import utils.loader.OBJLoader;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 import utils.math.Vector4f;
+import utils.particle.ParticleSystem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -100,6 +103,8 @@ public class GameLoop {
         text.setColor(1, 0 ,0);
         texts.add(text);
 
+        ParticleSystem particleSystem = new ParticleSystem(50, 25, 0.3f, 4);
+
         // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 
         while (!DisplayManager.windowShouldClose()) {
@@ -108,6 +113,9 @@ public class GameLoop {
 
             // mousePicker.update();
             // System.out.println(mousePicker.getCurrentRay());
+
+            if (KeyInput.isKeyDown(GLFW.GLFW_KEY_P))
+                particleSystem.generateParticles(dragon.getPosition());
 
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
