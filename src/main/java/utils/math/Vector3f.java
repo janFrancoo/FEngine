@@ -41,6 +41,10 @@ public class Vector3f {
         return (float) Math.sqrt(x * x + y * y + z * z);
     }
 
+    public float lengthSquared() {
+        return x * x + y * y + z * z;
+    }
+
     @Override
     public String toString() {
         return "Vector3f{" +

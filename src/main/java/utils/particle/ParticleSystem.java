@@ -1,6 +1,7 @@
 package utils.particle;
 
 import model.Particle;
+import model.TextureParticle;
 import render_engine.DisplayManager;
 import utils.math.Vector3f;
 
@@ -10,8 +11,10 @@ public class ParticleSystem {
     private final float speed;
     private final float gravityComplient;
     private final float lifeLength;
+    private final TextureParticle texture;
 
-    public ParticleSystem(float pps, float speed, float gravityComplient, float lifeLength) {
+    public ParticleSystem(TextureParticle texture, float pps, float speed, float gravityComplient, float lifeLength) {
+        this.texture = texture;
         this.pps = pps;
         this.speed = speed;
         this.gravityComplient = gravityComplient;
@@ -37,7 +40,8 @@ public class ParticleSystem {
         Vector3f velocity = new Vector3f(dirX, 1, dirZ);
         velocity.normalise();
         velocity.scale(speed);
-        new Particle(new Vector3f(center.x, center.y, center.z), velocity, gravityComplient, lifeLength, 0, 1);
+        new Particle(texture, new Vector3f(center.x, center.y, center.z), velocity, gravityComplient, lifeLength,
+                0, 2);
     }
 
 }

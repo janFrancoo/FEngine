@@ -103,7 +103,8 @@ public class GameLoop {
         text.setColor(1, 0 ,0);
         texts.add(text);
 
-        ParticleSystem particleSystem = new ParticleSystem(50, 25, 0.3f, 4);
+        TextureParticle particleTexture = new TextureParticle(loader.loadTexture("cosmic"), 4);
+        ParticleSystem particleSystem = new ParticleSystem(particleTexture, 50, 25, 0.3f, 4);
 
         // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
 

@@ -277,7 +277,7 @@ public class Renderer {
         skyboxRenderer.render();
         skyboxShader.stop();
 
-        ParticleManager.update();
+        ParticleManager.update(camera);
         particleRenderer.render(ParticleManager.particles, viewMatrix);
 
         guiShader.start();
