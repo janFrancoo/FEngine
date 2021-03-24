@@ -62,4 +62,6 @@ public class Constants {
     // Font
     public static final double LINE_HEIGHT = 0.03f;
     public static final int SPACE_ASCII = 32;
+    // Particle
+    public static final int MAX_PARTICLE_INSTANCE = 10000;
 }
