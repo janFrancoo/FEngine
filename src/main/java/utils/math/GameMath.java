@@ -80,4 +80,10 @@ public class GameMath {
         return mouseRay;
     }
 
+    public static float interpolate(float a, float b, float blend) {
+        double theta = blend * Math.PI;
+        float f = (float) (1f - Math.cos(theta)) * 0.5f;
+        return a * (1f - f) + b * f;
+    }
+
 }

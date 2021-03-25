@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL30;
 import render_engine.*;
 import utils.font.FontType;
 import utils.input.KeyInput;
-import utils.loader.NormalMappedOBJLoader;
 import utils.loader.OBJLoader;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
@@ -17,15 +16,10 @@ import utils.particle.ParticleSystem;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import static utils.Constants.TERRAIN_SIZE;
 
 public class GameLoop {
 
     public static void main(String[] args) {
-        Random random = new Random();
-
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
@@ -56,28 +50,6 @@ public class GameLoop {
         Player dragon = new Player(texturedDragon, new Vector3f(0, 0, -30), 0, 180, 0, 1);
         entities.add(dragon);
 
-        RawModel rawFern = OBJLoader.loadOBJModel("fern", loader);
-        Texture fernTextureAtlas = new Texture(loader.loadTexture("fern"));
-        fernTextureAtlas.setTransparent(true);
-        fernTextureAtlas.setFakeLight(true);
-        fernTextureAtlas.setRows(2);
-        TexturedModel texturedFern = new TexturedModel(rawFern, fernTextureAtlas);
-        for (int i=0; i<250; i++) {
-            float x = random.nextInt((int) TERRAIN_SIZE);
-            float z = random.nextInt((int) TERRAIN_SIZE) * -1;
-            entities.add(new Entity(texturedFern, random.nextInt(4),
-                    new Vector3f(x, terrain.getHeight(x, z), z), 0, 0, 0, 1));
-        }
-
-        RawModel rawBarrel = NormalMappedOBJLoader.loadOBJ("barrel", loader);
-        Texture textureBarrel = new Texture(loader.loadTexture("barrel"));
-        textureBarrel.setShineDamper(10);
-        textureBarrel.setReflectivity(0.5f);
-        textureBarrel.setNormalMapID(loader.loadTexture("barrelNormal"));
-        TexturedModel texturedBarrel = new TexturedModel(rawBarrel, textureBarrel);
-        Entity barrel = new Entity(texturedBarrel, new Vector3f(75, 10, -75), 0, 0, 0, 1f);
-        nmEntities.add(barrel);
-
         Camera camera = new Camera(dragon);
         camera.setPitch(3);
         List<Light> lights = new ArrayList<>();
@@ -93,7 +65,7 @@ public class GameLoop {
                 new Vector2f(0.2f, 0.2f));
         guis.add(healthGUI);
 
-        WaterTile waterTile = new WaterTile(75, -75, 0);
+        WaterTile waterTile = new WaterTile(150, -300, 0);
         waterTiles.add(waterTile);
 
         FontType font = new FontType(loader.loadTexture("comic_sans_ms"),

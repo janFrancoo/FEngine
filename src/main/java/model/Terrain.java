@@ -4,6 +4,7 @@ import render_engine.ModelLoader;
 import utils.math.GameMath;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
+import utils.terrain.HeightGenerator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -29,7 +30,9 @@ public class Terrain {
         this.blendMap = blendMap;
     }
 
-    private RawModel generateTerrain(ModelLoader loader, String heightMap){
+    private RawModel generateTerrain(ModelLoader loader, String heightMap) {
+        HeightGenerator heightGenerator = new HeightGenerator();
+
         BufferedImage image;
         try {
             image = ImageIO.read(new File("res/" + heightMap + ".png"));
@@ -38,24 +41,25 @@ public class Terrain {
             return null;
         }
 
-        int TERRAIN_VERTEX_COUNT = image.getHeight();
+        // int TERRAIN_VERTEX_COUNT = image.getHeight();
+        int TERRAIN_VERTEX_COUNT = 128;
         heights = new float[TERRAIN_VERTEX_COUNT][TERRAIN_VERTEX_COUNT];
         int count = TERRAIN_VERTEX_COUNT * TERRAIN_VERTEX_COUNT;
 
         float[] vertices = new float[count * 3];
         int[] indices = new int[6 * (TERRAIN_VERTEX_COUNT - 1) * (TERRAIN_VERTEX_COUNT - 1)];
-        float[] textureCoords = new float[count*2];
+        float[] textureCoords = new float[count * 2];
         float[] normals = new float[count * 3];
 
         int vertexPointer = 0;
-        for (int i=0; i<TERRAIN_VERTEX_COUNT; i++) {
-            for (int j=0; j<TERRAIN_VERTEX_COUNT; j++) {
-                float height = getHeightFromHeightMap(j, i, image);
+        for (int i = 0; i < TERRAIN_VERTEX_COUNT; i++) {
+            for (int j = 0; j < TERRAIN_VERTEX_COUNT; j++) {
+                float height = heightGenerator.generateHeight(j, i);
                 heights[j][i] = height;
                 vertices[vertexPointer * 3] = (float) j / ((float) TERRAIN_VERTEX_COUNT - 1) * TERRAIN_SIZE;
                 vertices[vertexPointer * 3 + 1] = height;
                 vertices[vertexPointer * 3 + 2] = (float) i / ((float) TERRAIN_VERTEX_COUNT - 1) * TERRAIN_SIZE;
-                Vector3f normal = calculateNormal(j, i, image);
+                Vector3f normal = calculateNormal(j, i, heightGenerator);
                 normals[vertexPointer * 3] = normal.x;
                 normals[vertexPointer * 3 + 1] = normal.y;
                 normals[vertexPointer * 3 + 2] = normal.z;
@@ -66,8 +70,8 @@ public class Terrain {
         }
 
         int pointer = 0;
-        for (int gz = 0; gz<TERRAIN_VERTEX_COUNT - 1; gz++) {
-            for (int gx = 0; gx<TERRAIN_VERTEX_COUNT - 1; gx++) {
+        for (int gz = 0; gz < TERRAIN_VERTEX_COUNT - 1; gz++) {
+            for (int gx = 0; gx < TERRAIN_VERTEX_COUNT - 1; gx++) {
                 int topLeft = gz * TERRAIN_VERTEX_COUNT + gx;
                 int topRight = topLeft + 1;
                 int bottomLeft = (gz + 1) * TERRAIN_VERTEX_COUNT + gx;
@@ -105,6 +109,16 @@ public class Terrain {
         return normal;
     }
 
+    private Vector3f calculateNormal(int x, int z, HeightGenerator heightGenerator) {
+        float heightL = heightGenerator.generateHeight(x - 1, z);
+        float heightR = heightGenerator.generateHeight(x + 1, z);
+        float heightD = heightGenerator.generateHeight(x, z - 1);
+        float heightU = heightGenerator.generateHeight(x, z + 1);
+        Vector3f normal = new Vector3f(heightL - heightR, 2f, heightD - heightU);
+        normal.normalise();
+        return normal;
+    }
+
     public float getHeight(float worldX, float worldZ) {
         float terrainX = worldX - x;
         float terrainZ = worldZ - z;
@@ -117,12 +131,12 @@ public class Terrain {
         float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
         if (xCoord <= (1 - zCoord)) {
             return GameMath.barryCentric(new Vector3f(0, heights[gridX][gridZ], 0), new Vector3f(1,
-                            heights[gridX + 1][gridZ], 0), new Vector3f(0,
-                            heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
+                    heights[gridX + 1][gridZ], 0), new Vector3f(0,
+                    heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
         } else {
-             return GameMath.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1,
-                            heights[gridX + 1][gridZ + 1], 1), new Vector3f(0,
-                            heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
+            return GameMath.barryCentric(new Vector3f(1, heights[gridX + 1][gridZ], 0), new Vector3f(1,
+                    heights[gridX + 1][gridZ + 1], 1), new Vector3f(0,
+                    heights[gridX][gridZ + 1], 1), new Vector2f(xCoord, zCoord));
         }
     }
 
