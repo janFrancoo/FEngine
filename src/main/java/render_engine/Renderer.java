@@ -258,6 +258,7 @@ public class Renderer {
         terrainShader.stop();
 
         waterShader.start();
+        waterShader.loadFogSettings(FOG_DENSITY, FOG_GRADIENT, SKY_COLOR);
         waterShader.loadViewMatrix(camera, viewMatrix);
         waterShader.connectTextures();
         waterShader.loadLight(lights.get(0));

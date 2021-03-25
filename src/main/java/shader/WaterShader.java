@@ -3,6 +3,7 @@ package shader;
 import model.Camera;
 import model.Light;
 import utils.math.Matrix4f;
+import utils.math.Vector3f;
 
 import static utils.Constants.WATER_FRAGMENT_SHADER_FILE;
 import static utils.Constants.WATER_VERTEX_SHADER_FILE;
@@ -21,6 +22,9 @@ public class WaterShader extends Shader {
     private int locationCameraPosition;
     private int locationLightPosition;
     private int locationLightColor;
+    private int locationDensity;
+    private int locationGradient;
+    private int locationSkyColor;
 
     public WaterShader() {
         super(WATER_VERTEX_SHADER_FILE, WATER_FRAGMENT_SHADER_FILE);
@@ -40,6 +44,9 @@ public class WaterShader extends Shader {
         locationCameraPosition = super.getUniformLocation("cameraPosition");
         locationLightPosition = super.getUniformLocation("lightPosition");
         locationLightColor = super.getUniformLocation("lightColor");
+        locationDensity = super.getUniformLocation("density");
+        locationGradient = super.getUniformLocation("gradient");
+        locationSkyColor = super.getUniformLocation("skyColor");
     }
 
     @Override
@@ -75,6 +82,12 @@ public class WaterShader extends Shader {
     public void loadLight(Light light) {
         super.loadVector(locationLightPosition, light.getPosition());
         super.loadVector(locationLightColor, light.getColor());
+    }
+
+    public void loadFogSettings(float density, float gradient, Vector3f skyColor) {
+        super.loadFloat(locationDensity, density);
+        super.loadFloat(locationGradient, gradient);
+        super.loadVector(locationSkyColor, skyColor);
     }
 
 }
