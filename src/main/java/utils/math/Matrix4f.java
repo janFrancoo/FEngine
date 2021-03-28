@@ -30,6 +30,25 @@ public class Matrix4f implements Cloneable {
         m.m33 = 1.0f;
     }
 
+    public void setIdentity() {
+        m00 = 1.0f;
+        m01 = 0.0f;
+        m02 = 0.0f;
+        m03 = 0.0f;
+        m10 = 0.0f;
+        m11 = 1.0f;
+        m12 = 0.0f;
+        m13 = 0.0f;
+        m20 = 0.0f;
+        m21 = 0.0f;
+        m22 = 1.0f;
+        m23 = 0.0f;
+        m30 = 0.0f;
+        m31 = 0.0f;
+        m32 = 0.0f;
+        m33 = 1.0f;
+    }
+
     public void store(FloatBuffer buf) {
         buf.put(m00);
         buf.put(m01);
@@ -47,6 +66,21 @@ public class Matrix4f implements Cloneable {
         buf.put(m31);
         buf.put(m32);
         buf.put(m33);
+    }
+
+    public void scale(Vector3f vec) {
+        m00 = m00 * vec.x;
+        m01 = m01 * vec.x;
+        m02 = m02 * vec.x;
+        m03 = m03 * vec.x;
+        m10 = m10 * vec.y;
+        m11 = m11 * vec.y;
+        m12 = m12 * vec.y;
+        m13 = m13 * vec.y;
+        m20 = m20 * vec.z;
+        m21 = m21 * vec.z;
+        m22 = m22 * vec.z;
+        m23 = m23 * vec.z;
     }
 
     public static void scale(Vector3f vec, Matrix4f src, Matrix4f dest) {
@@ -107,6 +141,13 @@ public class Matrix4f implements Cloneable {
         dest.m11 = t11;
         dest.m12 = t12;
         dest.m13 = t13;
+    }
+
+    public void translate(Vector3f vec) {
+        m30 += m00 * vec.x + m10 * vec.y + m20 * vec.z;
+        m31 += m01 * vec.x + m11 * vec.y + m21 * vec.z;
+        m32 += m02 * vec.x + m12 * vec.y + m22 * vec.z;
+        m33 += m03 * vec.x + m13 * vec.y + m23 * vec.z;
     }
 
     public static void translate(Vector2f vec, Matrix4f src, Matrix4f dest) {

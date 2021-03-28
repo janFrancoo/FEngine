@@ -30,6 +30,8 @@ public class TerrainShader extends Shader {
     private int locationCelEnable;
     private int locationCelLevel;
     private int locationClippingPlane;
+    private int locationToShadowMapSpace;
+    private int locationShadowMap;
 
     public TerrainShader() {
         super(TERRAIN_VERTEX_SHADER_FILE, TERRAIN_FRAGMENT_SHADER_FILE);
@@ -61,6 +63,8 @@ public class TerrainShader extends Shader {
         locationCelEnable = super.getUniformLocation("celEnable");
         locationCelLevel = super.getUniformLocation("celLevel");
         locationClippingPlane = super.getUniformLocation("clippingPlane");
+        locationToShadowMapSpace = super.getUniformLocation("toShadowMapSpace");
+        locationShadowMap = super.getUniformLocation("shadowMap");
     }
 
     @Override
@@ -76,6 +80,7 @@ public class TerrainShader extends Shader {
         super.loadInt(locationGTexture, 2);
         super.loadInt(locationBTexture, 3);
         super.loadInt(locationBlendMap, 4);
+        super.loadInt(locationShadowMap, 5);
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -121,6 +126,10 @@ public class TerrainShader extends Shader {
 
     public void loadClippingPlane(Vector4f clippingPlane) {
         super.loadVector(locationClippingPlane, clippingPlane);
+    }
+
+    public void loadToShadowMapSpace(Matrix4f matrix) {
+        super.loadMatrix(locationToShadowMapSpace, matrix);
     }
 
 }

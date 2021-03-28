@@ -2,6 +2,7 @@ package render_engine;
 
 import model.*;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import shader.*;
 import utils.font.FontType;
 import utils.math.GameMath;
@@ -28,6 +29,7 @@ public class Renderer {
     private final FontRenderer fontRenderer;
     private final SkyboxRenderer skyboxRenderer;
     private final ParticleShader particleShader;
+    private final ShadowShader shadowShader;
 
     private final EntityShader entityShader;
     private final NMShader nmShader;
@@ -38,6 +40,7 @@ public class Renderer {
     private final WaterShader waterShader;
     private final WaterRenderer waterRenderer;
     private final ParticleRenderer particleRenderer;
+    private final ShadowRenderer shadowRenderer;
 
     private final Map<TexturedModel, List<Entity>> entities = new HashMap<>();
     private final Map<TexturedModel, List<Entity>> nmEntities = new HashMap<>();
@@ -50,7 +53,7 @@ public class Renderer {
 
     private float skyBoxRotation = 0;
 
-    public Renderer(ModelLoader loader, WaterFrameBuffers waterFrameBuffers) {
+    public Renderer(ModelLoader loader, WaterFrameBuffers waterFrameBuffers, Camera camera) {
         this.loader = loader;
 
         entityShader = new EntityShader();
@@ -61,6 +64,7 @@ public class Renderer {
         skyboxShader = new SkyboxShader();
         waterShader = new WaterShader();
         particleShader = new ParticleShader();
+        shadowShader = new ShadowShader();
 
         entityRenderer = new EntityRenderer(entityShader);
         nmRenderer = new NMRenderer(nmShader);
@@ -70,6 +74,7 @@ public class Renderer {
         skyboxRenderer = new SkyboxRenderer(skyboxShader, loader);
         waterRenderer = new WaterRenderer(waterShader, waterFrameBuffers, loader);
         particleRenderer = new ParticleRenderer(loader, particleShader);
+        shadowRenderer = new ShadowRenderer(shadowShader, camera);
 
         enableCulling();
 
@@ -215,7 +220,9 @@ public class Renderer {
         terrainShader.loadClippingPlane(clippingPlane);
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
-        terrainRenderer.render(terrains);
+        GL13.glActiveTexture(GL13.GL_TEXTURE5);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTexture());
+        terrainRenderer.render(terrains, shadowRenderer.getToShadowMapSpaceMatrix());
         terrainShader.stop();
 
         skyboxShader.start();
@@ -236,6 +243,10 @@ public class Renderer {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
 
+        shadowShader.start();
+        shadowRenderer.render(entities, lights.get(0));
+        shadowShader.stop();
+
         entityShader.start();
         entityShader.loadClippingPlane(clippingPlane);
         entityShader.loadLights(lights);
@@ -254,7 +265,9 @@ public class Renderer {
         terrainShader.loadClippingPlane(clippingPlane);
         terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(viewMatrix);
-        terrainRenderer.render(terrains);
+        GL13.glActiveTexture(GL13.GL_TEXTURE5);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, getShadowMapTexture());
+        terrainRenderer.render(terrains, shadowRenderer.getToShadowMapSpaceMatrix());
         terrainShader.stop();
 
         waterShader.start();
@@ -307,10 +320,15 @@ public class Renderer {
         waterShader.clean();
         particleShader.clean();
         ParticleManager.clean();
+        shadowRenderer.clean();
     }
 
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
+    }
+
+    public int getShadowMapTexture() {
+        return shadowRenderer.getShadowMap();
     }
 
 }

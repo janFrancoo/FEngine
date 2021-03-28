@@ -5,12 +5,7 @@ import utils.math.GameMath;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 import utils.terrain.HeightGenerator;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
 import static utils.Constants.*;
 
 public class Terrain {
@@ -33,6 +28,7 @@ public class Terrain {
     private RawModel generateTerrain(ModelLoader loader, String heightMap) {
         HeightGenerator heightGenerator = new HeightGenerator();
 
+        /*
         BufferedImage image;
         try {
             image = ImageIO.read(new File("res/" + heightMap + ".png"));
@@ -41,7 +37,9 @@ public class Terrain {
             return null;
         }
 
-        // int TERRAIN_VERTEX_COUNT = image.getHeight();
+        int TERRAIN_VERTEX_COUNT = image.getHeight();
+        */
+
         int TERRAIN_VERTEX_COUNT = 128;
         heights = new float[TERRAIN_VERTEX_COUNT][TERRAIN_VERTEX_COUNT];
         int count = TERRAIN_VERTEX_COUNT * TERRAIN_VERTEX_COUNT;

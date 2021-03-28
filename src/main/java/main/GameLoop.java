@@ -23,8 +23,6 @@ public class GameLoop {
         DisplayManager.createDisplay();
 
         ModelLoader loader = new ModelLoader();
-        WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
-        Renderer renderer = new Renderer(loader, frameBufferObjects);
 
         List<Entity> entities = new ArrayList<>();
         List<Entity> nmEntities = new ArrayList<>();
@@ -70,7 +68,7 @@ public class GameLoop {
 
         FontType font = new FontType(loader.loadTexture("comic_sans_ms"),
                 new File("res/comic_sans_ms.fnt"));
-        TextGUI text = new TextGUI("TEST", 5, font, new Vector2f(0, 0.5f),
+        TextGUI text = new TextGUI("DragonFranco", 3, font, new Vector2f(-0.25f, 0.75f),
                 1f, true, loader);
         text.setColor(1, 0 ,0);
         texts.add(text);
@@ -78,14 +76,12 @@ public class GameLoop {
         TextureParticle particleTexture = new TextureParticle(loader.loadTexture("cosmic"), 4);
         ParticleSystem particleSystem = new ParticleSystem(particleTexture, 50, 25, 0.3f, 4);
 
-        // MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+        WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
+        Renderer renderer = new Renderer(loader, frameBufferObjects, camera);
 
         while (!DisplayManager.windowShouldClose()) {
             dragon.move(terrain);
             camera.move();
-
-            // mousePicker.update();
-            // System.out.println(mousePicker.getCurrentRay());
 
             if (KeyInput.isKeyDown(GLFW.GLFW_KEY_P))
                 particleSystem.generateParticles(dragon.getPosition());

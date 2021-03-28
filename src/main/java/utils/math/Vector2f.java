@@ -13,4 +13,8 @@ public class Vector2f {
         return new Vector2f(left.x - right.x, left.y - right.y);
     }
 
+    public float length() {
+        return (float) Math.sqrt(x * x + y * y);
+    }
+
 }

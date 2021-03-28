@@ -22,6 +22,8 @@ public class Constants {
     public static final String FONT_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "fontFragmentShader.txt";
     public static final String PARTICLE_VERTEX_SHADER_FILE = SHADER_FOLDER + "particleVertexShader.txt";
     public static final String PARTICLE_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "particleFragmentShader.txt";
+    public static final String SHADOW_VERTEX_SHADER_FILE = SHADER_FOLDER + "shadowVertexShader.txt";
+    public static final String SHADOW_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "shadowFragmentShader.txt";
     // Game Settings
     // Window
     public static final int WIDTH = 2048;
@@ -36,6 +38,7 @@ public class Constants {
     public static final int REFRACTION_WIDTH = 1280;
     public static final int REFRACTION_HEIGHT = 720;
     public static final float LOD_BIAS = -2.0f;
+    public static final float SHADOW_DISTANCE = 100;
     // Terrain
     public static final float TERRAIN_SIZE = 800;
     public static final float TERRAIN_MAX_HEIGHT = 80;

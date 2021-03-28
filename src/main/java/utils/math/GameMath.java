@@ -27,7 +27,7 @@ public class GameMath {
 
     public static Matrix4f createProjectionMatrix() {
         float aspectRatio = (float) Constants.WIDTH / (float) Constants.HEIGHT;
-        float yScale = (float) ((1f / Math.tan(Math.toRadians(Constants.FOV / 2f))) * aspectRatio);
+        float yScale = (float) (1f / Math.tan(Math.toRadians(Constants.FOV / 2f)));
         float xScale = yScale / aspectRatio;
         float frustumLen = Constants.FAR_PLANE - Constants.NEAR_PLANE;
 
