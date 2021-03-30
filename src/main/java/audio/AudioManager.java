@@ -6,6 +6,7 @@ import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
 import utils.loader.Wave;
 import utils.loader.WaveLoader;
+import utils.math.Vector3f;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import static org.lwjgl.openal.ALC10.*;
 
-public class Audio {
+public class AudioManager {
 
     private static final List<Integer> buffers = new ArrayList<>();
 
@@ -40,8 +41,8 @@ public class Audio {
         return buffer;
     }
 
-    public static void setListenerData() {
-        AL10.alListener3f(AL10.AL_POSITION, 0, 0 ,0);
+    public static void setListenerData(Vector3f position) {
+        AL10.alListener3f(AL10.AL_POSITION, position.x, position.y, position.z);
         AL10.alListener3f(AL10.AL_VELOCITY, 0, 0 ,0);
     }
 
