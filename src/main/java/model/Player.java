@@ -1,5 +1,6 @@
 package model;
 
+import audio.Source;
 import org.lwjgl.glfw.GLFW;
 import render_engine.DisplayManager;
 import utils.input.KeyInput;
@@ -18,8 +19,8 @@ public class Player extends Entity {
         super(texturedModel, position, rotX, rotY, rotZ, scale);
     }
 
-    public void move(Terrain terrain) {
-        checkInputs();
+    public void move(Terrain terrain, Source source, int jumpSound) {
+        checkInputs(source, jumpSound);
         super.increaseRotation(0, (float) (currentTurnSpeed * DisplayManager.getDelta()), 0);
         float distance = (float) (currentRunSpeed * DisplayManager.getDelta());
         float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -35,7 +36,7 @@ public class Player extends Entity {
         }
     }
 
-    private void checkInputs() {
+    private void checkInputs(Source source, int jumpSound) {
         if (KeyInput.isKeyDown(GLFW.GLFW_KEY_W))
             currentRunSpeed = RUN_SPEED;
         else if (KeyInput.isKeyDown(GLFW.GLFW_KEY_S))
@@ -51,6 +52,7 @@ public class Player extends Entity {
             currentTurnSpeed = 0;
 
         if (!isJumping && KeyInput.isKeyDown(GLFW.GLFW_KEY_SPACE)) {
+            source.play(jumpSound);
             isJumping = true;
             currentUpwardsSpeed = JUMP_POWER;
         }

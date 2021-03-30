@@ -1,7 +1,11 @@
 package main;
 
+import audio.AudioManager;
+import audio.Source;
 import model.*;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import render_engine.*;
@@ -21,6 +25,16 @@ public class GameLoop {
 
     public static void main(String[] args) {
         DisplayManager.createDisplay();
+        AudioManager.init();
+        AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
+
+        int lakeSound = AudioManager.loadSound("lake.wav");
+        Source lakeSource = new Source(1, 50, 150);
+        lakeSource.setLooping(true);
+        lakeSource.play(lakeSound);
+
+        int jumpSound = AudioManager.loadSound("bounce.wav");
+        Source playerSource = new Source(1, 6, 15);
 
         ModelLoader loader = new ModelLoader();
 
@@ -64,6 +78,7 @@ public class GameLoop {
         guis.add(healthGUI);
 
         WaterTile waterTile = new WaterTile(150, -300, 0);
+        lakeSource.setPosition(new Vector3f(150, 0, -300));
         waterTiles.add(waterTile);
 
         FontType font = new FontType(loader.loadTexture("comic_sans_ms"),
@@ -80,8 +95,11 @@ public class GameLoop {
         Renderer renderer = new Renderer(loader, frameBufferObjects, camera);
 
         while (!DisplayManager.windowShouldClose()) {
-            dragon.move(terrain);
+            dragon.move(terrain, playerSource, jumpSound);
             camera.move();
+
+            AudioManager.setListenerData(dragon.getPosition());
+            playerSource.setPosition(dragon.getPosition());
 
             if (KeyInput.isKeyDown(GLFW.GLFW_KEY_P))
                 particleSystem.generateParticles(dragon.getPosition());
@@ -110,8 +128,11 @@ public class GameLoop {
             DisplayManager.updateDisplay();
         }
 
+        lakeSource.remove();
+        playerSource.remove();
         frameBufferObjects.clean();
         renderer.clean();
+        AudioManager.clean();
         DisplayManager.closeDisplay();
     }
 

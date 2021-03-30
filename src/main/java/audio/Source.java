@@ -7,11 +7,11 @@ public class Source {
 
     private final int sourceId;
 
-    public Source() {
+    public Source(float rollOfFactor, float referenceDistance, float maxDistance) {
         sourceId = AL10.alGenSources();
-        AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
-        AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 6);
-        AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 15);
+        AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, rollOfFactor);
+        AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, referenceDistance);
+        AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, maxDistance);
     }
 
     public void play(int buffer) {
@@ -36,8 +36,8 @@ public class Source {
         AL10.alSourcef(sourceId, AL10.AL_PITCH, pitch);
     }
 
-    public void setPosition(float x, float y, float z) {
-        AL10.alSource3f(sourceId, AL10.AL_POSITION, x, y, z);
+    public void setPosition(Vector3f position) {
+        AL10.alSource3f(sourceId, AL10.AL_POSITION, position.x, position.y, position.z);
     }
 
     public boolean isPlaying() {
