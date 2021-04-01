@@ -3,6 +3,8 @@ package render_engine;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.system.MemoryStack;
 import utils.Constants;
 import utils.input.CursorInput;
@@ -57,8 +59,10 @@ public class DisplayManager {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // v-sync enable
         glfwShowWindow(window);
+        glfwWindowHint(GLFW_SAMPLES, 8);
 
         GL.createCapabilities();
+        GL11.glEnable(GL13.GL_MULTISAMPLE);
     }
 
     public static void updateDisplay() {
