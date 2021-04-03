@@ -9,6 +9,7 @@ import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import render_engine.*;
+import utils.Constants;
 import utils.font.FontType;
 import utils.input.KeyInput;
 import utils.loader.OBJLoader;
@@ -16,6 +17,8 @@ import utils.math.Vector2f;
 import utils.math.Vector3f;
 import utils.math.Vector4f;
 import utils.particle.ParticleSystem;
+import utils.post_processing.FBO;
+import utils.post_processing.PostProcessing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +95,9 @@ public class GameLoop {
         WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
         Renderer renderer = new Renderer(loader, frameBufferObjects, camera);
 
+        FBO fbo = new FBO(Constants.WIDTH, Constants.HEIGHT, FBO.DEPTH_RENDER_BUFFER);
+        PostProcessing.init(loader);
+
         while (!DisplayManager.windowShouldClose()) {
             dragon.move(terrain, playerSource, jumpSound);
             camera.move();
@@ -118,14 +124,22 @@ public class GameLoop {
                     waterTile.getHeight() + 1.0f));
 
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-
             frameBufferObjects.unbindCurrentFrameBuffer();
-            renderer.renderScene(entities, nmEntities, terrains, guis, texts, waterTiles, camera, lights,
-                    new Vector4f(0, -1, 0, 100000));
+
+            renderer.renderShadows(entities, lights);
+
+            fbo.bindFrameBuffer();
+            renderer.renderScene(nmEntities, terrains, waterTiles, camera, lights, new Vector4f(0, -1, 0, 100000));
+            fbo.unbindFrameBuffer();
+            PostProcessing.doPostProcessing(fbo.getColorTexture());
+
+            renderer.renderGuisAndTexts(guis, texts);
 
             DisplayManager.updateDisplay();
         }
 
+        PostProcessing.clean();
+        fbo.cleanUp();
         lakeSource.remove();
         playerSource.remove();
         frameBufferObjects.clean();

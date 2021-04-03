@@ -172,35 +172,22 @@ public class Renderer {
         this.waterTiles.clear();
     }
 
-    public void renderScene(List<Entity> entities, List<Entity> nmEntities, List<Terrain> terrains,
-                            List<TextureGUI> guis, List<TextGUI> texts, List<WaterTile> waterTiles, Camera camera,
+    public void renderScene(List<Entity> nmEntities, List<Terrain> terrains, List<WaterTile> waterTiles, Camera camera,
                             List<Light> lights, Vector4f clippingPlane) {
-        for (Entity entity : entities)
-            processEntity(entity);
-
         for (Entity nmEntity : nmEntities)
             processNMEntity(nmEntity);
 
         for (Terrain terrain : terrains)
             processTerrain(terrain);
 
-        for (TextureGUI gui : guis)
-            processGUI(gui);
-
-        for (TextGUI text : texts)
-            processText(text);
-
         for (WaterTile waterTile : waterTiles)
             processWaterTile(waterTile);
 
-        render(this.entities, this.nmEntities, this.terrains, this.guis, this.texts, this.waterTiles,
-                camera, lights, clippingPlane);
+        render(this.entities, this.nmEntities, this.terrains, this.waterTiles, camera, lights, clippingPlane);
 
         this.entities.clear();
         this.nmEntities.clear();
         this.terrains.clear();
-        this.guis.clear();
-        this.texts.clear();
         this.waterTiles.clear();
     }
 
@@ -238,14 +225,10 @@ public class Renderer {
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities, Map<TexturedModel, List<Entity>> nmEntities,
-                       List<Terrain> terrains, List<TextureGUI> guis, Map<FontType, List<TextGUI>> texts,
-                       List<WaterTile> waterTiles, Camera camera, List<Light> lights, Vector4f clippingPlane) {
+                       List<Terrain> terrains, List<WaterTile> waterTiles, Camera camera, List<Light> lights,
+                       Vector4f clippingPlane) {
         prepare();
         Matrix4f viewMatrix = GameMath.createViewMatrix(camera);
-
-        shadowShader.start();
-        shadowRenderer.render(entities, lights.get(0));
-        shadowShader.stop();
 
         entityShader.start();
         entityShader.loadClippingPlane(clippingPlane);
@@ -293,14 +276,34 @@ public class Renderer {
 
         ParticleManager.update(camera);
         particleRenderer.render(ParticleManager.particles, viewMatrix);
+    }
+
+    public void renderShadows(List<Entity> entities, List<Light> lights) {
+        for (Entity entity : entities)
+            processEntity(entity);
+
+        shadowShader.start();
+        shadowRenderer.render(this.entities, lights.get(0));
+        shadowShader.stop();
+    }
+
+    public void renderGuisAndTexts(List<TextureGUI> guis, List<TextGUI> texts) {
+        for (TextureGUI gui : guis)
+            processGUI(gui);
+
+        for (TextGUI text : texts)
+            processText(text);
 
         guiShader.start();
         guiRenderer.render(guis);
         guiShader.stop();
 
         fontShader.start();
-        fontRenderer.render(texts);
+        fontRenderer.render(this.texts);
         fontShader.stop();
+
+        this.guis.clear();
+        this.texts.clear();
     }
 
     private void prepare() {
