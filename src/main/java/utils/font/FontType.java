@@ -9,7 +9,7 @@ public class FontType {
     private final int textureAtlas;
     private final TextMeshCreator loader;
 
-    public FontType(int textureAtlas, File fontFile) {
+    public FontType(int textureAtlas, String fontFile) {
         this.textureAtlas = textureAtlas;
         this.loader = new TextMeshCreator(fontFile);
     }

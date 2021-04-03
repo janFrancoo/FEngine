@@ -1,9 +1,6 @@
 package utils.font;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,10 +30,13 @@ public class MetaFile {
     private BufferedReader reader;
     private final Map<String, String> values = new HashMap<>();
 
-    protected MetaFile(File file) {
+    protected MetaFile(String file) {
         double aspectRatio = (double) WIDTH / (double) HEIGHT;
         try {
-            reader = new BufferedReader(new FileReader(file));
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
+            assert stream != null;
+            InputStreamReader isr = new InputStreamReader(stream);
+            reader = new BufferedReader(isr);
             processNextLine();
             this.padding = getValuesOfVariable("padding");
             this.paddingWidth = padding[PAD_LEFT] + padding[PAD_RIGHT];
@@ -49,7 +49,7 @@ public class MetaFile {
             loadCharacterData(imageWidth);
             reader.close();
         } catch (IOException e) {
-            System.err.println("Could not read font meta file: " + file.getName());
+            e.printStackTrace();
         }
     }
 

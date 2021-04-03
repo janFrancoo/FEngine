@@ -2,7 +2,6 @@ package utils.loader;
 
 import model.RawModel;
 import render_engine.ModelLoader;
-import utils.Constants;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 
@@ -13,13 +12,9 @@ import java.util.List;
 public class NormalMappedOBJLoader {
 
     public static RawModel loadOBJ(String objFileName, ModelLoader loader) {
-        FileReader isr = null;
-        File objFile = new File(Constants.RES_FOLDER + "/" + objFileName + ".obj");
-        try {
-            isr = new FileReader(objFile);
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getLocalizedMessage());
-        }
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(objFileName + ".obj");
+        assert stream != null;
+        InputStreamReader isr = new InputStreamReader(stream);
         BufferedReader reader = new BufferedReader(isr);
         String line;
         List<VertexNM> vertices = new ArrayList();

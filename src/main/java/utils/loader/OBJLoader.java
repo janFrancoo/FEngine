@@ -2,30 +2,20 @@ package utils.loader;
 
 import model.RawModel;
 import render_engine.ModelLoader;
-import utils.Constants;
 import utils.math.Vector2f;
 import utils.math.Vector3f;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OBJLoader {
 
     public static RawModel loadOBJModel(String fileName, ModelLoader loader) {
-        FileReader fileReader;
-
-        try {
-            fileReader = new FileReader(Constants.RES_FOLDER + "/" + fileName + ".obj");
-        } catch (FileNotFoundException e) {
-            System.err.println("Could not load the file: " + fileName + ".obj");
-            e.printStackTrace();
-            return null;
-        }
-
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName + ".obj");
+        assert stream != null;
+        InputStreamReader isr = new InputStreamReader(stream);
+        BufferedReader bufferedReader = new BufferedReader(isr);
         String line;
 
         List<Vector3f> vertices = new ArrayList<>();

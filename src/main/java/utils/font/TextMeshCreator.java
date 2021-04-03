@@ -13,7 +13,7 @@ public class TextMeshCreator {
 
     private final MetaFile metaData;
 
-    protected TextMeshCreator(File metaFile) {
+    protected TextMeshCreator(String metaFile) {
         metaData = new MetaFile(metaFile);
     }
 

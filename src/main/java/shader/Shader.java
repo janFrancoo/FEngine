@@ -8,9 +8,7 @@ import utils.math.Vector2f;
 import utils.math.Vector3f;
 import utils.math.Vector4f;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.FloatBuffer;
 
 public abstract class Shader {
@@ -89,7 +87,9 @@ public abstract class Shader {
     private static int loadShader(String file, int type) {
         StringBuilder shaderSource = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
+            assert stream != null;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String line;
             while ((line = reader.readLine()) != null)
                 shaderSource.append(line).append("\n");

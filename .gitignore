@@ -1,4 +1,5 @@
-res/
+src/main/resources/*
+!src/main/resources/*/
 out/
 .idea/
 target/

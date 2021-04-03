@@ -4,8 +4,7 @@ import utils.math.Vector3f;
 
 public class Constants {
     // Folders & files
-    public static final String RES_FOLDER = "res";
-    private static final String SHADER_FOLDER = "C:\\Users\\PC\\Documents\\Java Projects\\FEngine\\src\\main\\java\\shader\\";
+    private static final String SHADER_FOLDER = "shader/";
     public static final String VERTEX_SHADER_FILE = SHADER_FOLDER + "vertexShader.txt";
     public static final String FRAGMENT_SHADER_FILE = SHADER_FOLDER + "fragmentShader.txt";
     public static final String TERRAIN_VERTEX_SHADER_FILE = SHADER_FOLDER + "terrainVertexShader.txt";

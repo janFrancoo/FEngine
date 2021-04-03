@@ -2,8 +2,6 @@ package utils.loader;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
-import utils.Constants;
-
 import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -11,13 +9,7 @@ import java.nio.ByteBuffer;
 public class WaveLoader {
 
     public static Wave loadWave(String fileName) {
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(Constants.RES_FOLDER + "/" + fileName);
-        } catch (FileNotFoundException e) {
-            System.err.println("Couldn't find file: " + fileName);
-            e.printStackTrace();
-        }
+        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
 
         assert stream != null;
         InputStream bufferedInput = new BufferedInputStream(stream);

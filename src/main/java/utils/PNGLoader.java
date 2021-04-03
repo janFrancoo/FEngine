@@ -2,10 +2,8 @@ package utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
-
-import static utils.Constants.RES_FOLDER;
+import java.io.InputStream;
 
 public class PNGLoader {
 
@@ -14,7 +12,9 @@ public class PNGLoader {
         int width = 0, height = 0;
 
         try {
-            BufferedImage image = ImageIO.read(new FileInputStream(RES_FOLDER + "/" + fileName + ".png"));
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName + ".png");
+            assert stream != null;
+            BufferedImage image = ImageIO.read(stream);
             width = image.getWidth();
             height = image.getHeight();
             pixels = new int[width * height];

@@ -17,7 +17,6 @@ import utils.math.Vector3f;
 import utils.math.Vector4f;
 import utils.particle.ParticleSystem;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,8 +80,7 @@ public class GameLoop {
         lakeSource.setPosition(new Vector3f(150, 0, -300));
         waterTiles.add(waterTile);
 
-        FontType font = new FontType(loader.loadTexture("comic_sans_ms"),
-                new File("res/comic_sans_ms.fnt"));
+        FontType font = new FontType(loader.loadTexture("comic_sans_ms"), "comic_sans_ms.fnt");
         TextGUI text = new TextGUI("DragonFranco", 3, font, new Vector2f(-0.25f, 0.75f),
                 1f, true, loader);
         text.setColor(1, 0 ,0);
