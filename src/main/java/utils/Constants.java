@@ -25,6 +25,9 @@ public class Constants {
     public static final String SHADOW_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "shadowFragmentShader.txt";
     public static final String CONTRAST_VERTEX_SHADER_FILE = SHADER_FOLDER + "contrastVertexShader.txt";
     public static final String CONTRAST_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "contrastFragmentShader.txt";
+    public static final String HORIZONTAL_BLUR_VERTEX_SHADER_FILE = SHADER_FOLDER + "horizontalBlurVertexShader.txt";
+    public static final String VERTICAL_BLUR_VERTEX_SHADER_FILE = SHADER_FOLDER + "verticalBlurVertexShader.txt";
+    public static final String BLUR_FRAGMENT_SHADER_FILE = SHADER_FOLDER + "blurFragmentShader.txt";
     // Game Settings
     // Window
     public static final int WIDTH = 2048;
