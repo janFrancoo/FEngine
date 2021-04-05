@@ -59,7 +59,7 @@ public class DisplayManager {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // v-sync enable
         glfwShowWindow(window);
-        glfwWindowHint(GLFW_SAMPLES, 8);
+        // glfwWindowHint(GLFW_SAMPLES, 8);
 
         GL.createCapabilities();
         GL11.glEnable(GL13.GL_MULTISAMPLE);

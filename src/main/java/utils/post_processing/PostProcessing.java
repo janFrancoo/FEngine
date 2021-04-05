@@ -28,9 +28,9 @@ public class PostProcessing {
         GL30.glBindVertexArray(quad.getVaoId());
         GL20.glEnableVertexAttribArray(0);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
-        horizontalBlur.render(colorTexture);
-        verticalBlur.render(horizontalBlur.getOutputTexture());
-        contrastChanger.render(verticalBlur.getOutputTexture());
+        // horizontalBlur.render(colorTexture);
+        // verticalBlur.render(horizontalBlur.getOutputTexture());
+        contrastChanger.render(colorTexture);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);

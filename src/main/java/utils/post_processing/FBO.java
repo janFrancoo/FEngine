@@ -18,6 +18,7 @@ public class FBO {
     private final int height;
 
     private int frameBuffer;
+    private boolean multiSample = false;
 
     private int colourTexture;
     private int depthTexture;
@@ -29,6 +30,13 @@ public class FBO {
         this.width = width;
         this.height = height;
         initialiseFrameBuffer(depthBufferType);
+    }
+
+    public FBO(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.multiSample = true;
+        initialiseFrameBuffer(DEPTH_RENDER_BUFFER);
     }
 
     public void cleanUp() {
@@ -66,12 +74,37 @@ public class FBO {
     private void initialiseFrameBuffer(int type) {
         createFrameBuffer();
         createTextureAttachment();
+
+        if (multiSample) {
+            createMultiSampleColorBufferAttachment();
+        } else {
+            createTextureAttachment();
+        }
+
         if (type == DEPTH_RENDER_BUFFER) {
             createDepthBufferAttachment();
         } else if (type == DEPTH_TEXTURE) {
             createDepthTextureAttachment();
         }
+
         unbindFrameBuffer();
+    }
+
+    public void resolveToFBO(FBO outFBO) {
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, outFBO.frameBuffer);
+        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.frameBuffer);
+        GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, outFBO.width, outFBO.height,
+                GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
+        this.unbindFrameBuffer();
+    }
+
+    public void resolveToScreen() {
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, 0);
+        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, this.frameBuffer);
+        GL11.glDrawBuffer(GL11.GL_BACK);
+        GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, Constants.WIDTH, Constants.HEIGHT,
+                GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
+        this.unbindFrameBuffer();
     }
 
     private void createFrameBuffer() {
@@ -103,10 +136,22 @@ public class FBO {
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthTexture, 0);
     }
 
+    private void createMultiSampleColorBufferAttachment() {
+        colourBuffer = GL30.glGenRenderbuffers();
+        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, colourBuffer);
+        GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, 4, GL11.GL_RGBA, width, height);
+        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL30.GL_RENDERBUFFER,
+                colourBuffer);
+    }
+
     private void createDepthBufferAttachment() {
         depthBuffer = GL30.glGenRenderbuffers();
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthBuffer);
-        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
+        if (!multiSample) {
+            GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
+        } else {
+            GL30.glRenderbufferStorageMultisample(GL30.GL_RENDERBUFFER, 4, GL14.GL_DEPTH_COMPONENT24, width, height);
+        }
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER,
                 depthBuffer);
     }

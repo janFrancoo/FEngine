@@ -95,7 +95,8 @@ public class GameLoop {
         WaterFrameBuffers frameBufferObjects = new WaterFrameBuffers();
         Renderer renderer = new Renderer(loader, frameBufferObjects, camera);
 
-        FBO fbo = new FBO(Constants.WIDTH, Constants.HEIGHT, FBO.DEPTH_RENDER_BUFFER);
+        FBO multiSampleFBO = new FBO(Constants.WIDTH, Constants.HEIGHT);
+        FBO outputFBO = new FBO(Constants.WIDTH, Constants.HEIGHT, FBO.DEPTH_TEXTURE);
         PostProcessing.init(loader);
 
         while (!DisplayManager.windowShouldClose()) {
@@ -128,10 +129,11 @@ public class GameLoop {
 
             renderer.renderShadows(entities, lights);
 
-            fbo.bindFrameBuffer();
+            multiSampleFBO.bindFrameBuffer();
             renderer.renderScene(nmEntities, terrains, waterTiles, camera, lights, new Vector4f(0, -1, 0, 100000));
-            fbo.unbindFrameBuffer();
-            PostProcessing.doPostProcessing(fbo.getColorTexture());
+            multiSampleFBO.unbindFrameBuffer();
+            multiSampleFBO.resolveToFBO(outputFBO);
+            PostProcessing.doPostProcessing(outputFBO.getColorTexture());
 
             renderer.renderGuisAndTexts(guis, texts);
 
@@ -139,7 +141,8 @@ public class GameLoop {
         }
 
         PostProcessing.clean();
-        fbo.cleanUp();
+        multiSampleFBO.cleanUp();
+        outputFBO.cleanUp();
         lakeSource.remove();
         playerSource.remove();
         frameBufferObjects.clean();
