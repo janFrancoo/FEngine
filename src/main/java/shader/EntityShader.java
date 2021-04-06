@@ -29,6 +29,9 @@ public class EntityShader extends Shader {
     private int locationCelEnable;
     private int locationCelLevel;
     private int locationClippingPlane;
+    private int locationSpecularMap;
+    private int locationUseSpecularMap;
+    private int locationModelTexture;
 
     public EntityShader() {
         super(VERTEX_SHADER_FILE, FRAGMENT_SHADER_FILE);
@@ -58,6 +61,9 @@ public class EntityShader extends Shader {
         locationCelEnable = super.getUniformLocation("celEnable");
         locationCelLevel = super.getUniformLocation("celLevel");
         locationClippingPlane = super.getUniformLocation("clippingPlane");
+        locationSpecularMap = super.getUniformLocation("specularMap");
+        locationUseSpecularMap = super.getUniformLocation("useSpecularMap");
+        locationModelTexture = super.getUniformLocation("modelTexture");
     }
 
     @Override
@@ -65,6 +71,11 @@ public class EntityShader extends Shader {
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoord");
         super.bindAttribute(2, "normal");
+    }
+
+    public void connectTextureUnits() {
+        super.loadInt(locationModelTexture, 0);
+        super.loadInt(locationSpecularMap, 1);
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
@@ -122,6 +133,10 @@ public class EntityShader extends Shader {
 
     public void loadClippingPlane(Vector4f clippingPlane) {
         super.loadVector(locationClippingPlane, clippingPlane);
+    }
+
+    public void loadUseSpecularMap(boolean val) {
+        super.loadBoolean(locationUseSpecularMap, val);
     }
 
 }

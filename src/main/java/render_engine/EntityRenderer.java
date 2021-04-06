@@ -51,6 +51,11 @@ public class EntityRenderer {
         shader.loadShineValues(texturedModel.getTexture().getShineDamper(), texturedModel.getTexture().getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getTextureID());
+        shader.loadUseSpecularMap(texturedModel.getTexture().hasSpecularMap());
+        if (texturedModel.getTexture().hasSpecularMap()) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE1);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getSpecularMap());
+        }
     }
 
     private void prepareInstance(Entity entity) {

@@ -9,6 +9,8 @@ public class Texture {
     private boolean transparent = false;
     private boolean fakeLight = false;
     private int rows = 1;
+    private int specularMap;
+    private boolean hasSpecularMap = false;
 
     public Texture(int textureID) {
         this.textureID = textureID;
@@ -66,4 +68,16 @@ public class Texture {
         this.rows = rows;
     }
 
+    public void setSpecularMap(int specularMap) {
+        this.specularMap = specularMap;
+        this.hasSpecularMap = true;
+    }
+
+    public boolean hasSpecularMap() {
+        return hasSpecularMap;
+    }
+
+    public int getSpecularMap() {
+        return specularMap;
+    }
 }
