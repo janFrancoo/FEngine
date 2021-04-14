@@ -13,13 +13,15 @@ public class PNGLoader {
 
         try {
             InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName + ".png");
-            assert stream != null;
+            if (stream == null)
+                throw new IOException();
             BufferedImage image = ImageIO.read(stream);
             width = image.getWidth();
             height = image.getHeight();
             pixels = new int[width * height];
             image.getRGB(0, 0, width, height, pixels, 0, width);
         } catch (IOException e) {
+            System.err.println(fileName);
             e.printStackTrace();
         }
 

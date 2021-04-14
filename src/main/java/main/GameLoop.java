@@ -57,7 +57,7 @@ public class GameLoop {
         terrains.add(terrain);
 
         RawModel rawDragon = OBJLoader.loadOBJModel("dragon", loader);
-        Texture textureDragon = new Texture(loader.loadTexture("stallTexture"));
+        Texture textureDragon = new Texture(loader.loadTexture("dragonTexture"));
         textureDragon.setShineDamper(10);
         textureDragon.setReflectivity(1);
         TexturedModel texturedDragon = new TexturedModel(rawDragon, textureDragon);
